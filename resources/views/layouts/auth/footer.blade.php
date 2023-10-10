@@ -1,10 +1,10 @@
 <!-- Required Js -->
-<script src="../assets/plugins/sweetalert2/dist/sweetalert2.min.js"></script>
+<script src="../assets/auth/plugins/sweetalert2/dist/sweetalert2.min.js"></script>
 <script src="../assets/auth/js/vendor-all.min.js"></script>
-<script src="../assets/plugins/bootstrap/js/bootstrap.min.js"></script>
+<script src="../assets/auth/plugins/bootstrap/js/bootstrap.min.js"></script>
 <script>
     $(window).on("load", function() {
-        $(".loading-container").fadeOut(500);
+        $(".loading-container-1").fadeOut(500);
     });
 
     $.ajaxSetup({

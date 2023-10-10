@@ -3,7 +3,7 @@
 
 <head>
 
-    <title>Pamdes | login</title>
+    <title>Pamdes | Login</title>
 
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
@@ -15,28 +15,28 @@
 
     <link rel="stylesheet" href="../assets/auth/css/my-style.css">
     <!-- Favicon icon -->
-    <link rel="icon" href="../assets/auth/images/favicon.png" type="image/x-icon">
+    <link rel="icon" href="../assets/img/icon.ico" type="image/x-icon">
     <!-- fontawesome icon -->
     <link rel="stylesheet" href="../assets/auth/fonts/fontawesome/css/fontawesome-all.min.css">
     <!-- animation css -->
-    <link rel="stylesheet" href="../assets/plugins/animation/css/animate.min.css">
+    <link rel="stylesheet" href="../assets/auth/plugins/animation/css/animate.min.css">
 
     <!-- vendor css -->
-    <link href="../assets/plugins/sweetalert2/dist/sweetalert2.min.css" rel="stylesheet">
+    <link href="../assets/auth/plugins/sweetalert2/dist/sweetalert2.min.css" rel="stylesheet">
     <link rel="stylesheet" href="../assets/auth/css/style.css">
 
 </head>
 
 <body>
-    <div class='loading-container'>
-        <div class="loading-overlay"></div>
-        <div class='loader'>
-            <div class='loader--dot'></div>
-            <div class='loader--dot'></div>
-            <div class='loader--dot'></div>
-            <div class='loader--dot'></div>
-            <div class='loader--dot'></div>
-            <div class='loader--dot'></div>
-            <div class='loader--text'></div>
+    <div class='loading-container-1'>
+        <div class="loading-overlay-1"></div>
+        <div class='loader-1'>
+            <div class='loader--dot-1'></div>
+            <div class='loader--dot-1'></div>
+            <div class='loader--dot-1'></div>
+            <div class='loader--dot-1'></div>
+            <div class='loader--dot-1'></div>
+            <div class='loader--dot-1'></div>
+            <div class='loader--text-1'></div>
         </div>
     </div>

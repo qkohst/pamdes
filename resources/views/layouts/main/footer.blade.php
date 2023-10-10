@@ -45,11 +45,23 @@
 
 <!-- Atlantis JS -->
 <script src="../assets/js/atlantis.min.js"></script>
+<!-- Datatables -->
+<script src="../../assets/js/plugin/datatables/datatables.min.js"></script>
 
 <!-- Atlantis DEMO methods, don't include it in your project! -->
 <script src="../assets/js/setting-demo.js"></script>
 <script src="../assets/js/demo.js"></script>
 <script>
+    $(window).on("load", function() {
+        $(".loading-container-1").fadeOut(500);
+    });
+
+    $(document).ready(function() {
+        $('#add-row').DataTable({
+            "pageLength": 10,
+        });
+    });
+
     Circles.create({
         id: 'circles-1',
         radius: 45,

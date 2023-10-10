@@ -8,8 +8,8 @@
                     <form id="form-login">
                         <div class="card-body">
                             <div class="login-logo">
-                                <img src="../assets/images/logo.png" alt="Logo" class="brand-image img-circle">
-                                <p>Aplikasi E-Raport</p>
+                                <img src="../assets/img/icon.svg" alt="Logo" class="brand-image img-circle">
+                                <p>Login</p>
                             </div>
                             <h4 class="mb-3 f-w-400">Login dengan akun anda</h4>
                             <div class="input-group">
@@ -33,7 +33,7 @@
                     </form>
                 </div>
                 <div class="col-md-6 d-none d-md-block">
-                    <img src="../assets/images/auth-bg.png" alt="" class="img-fluid">
+                    <img src="../assets/img/bg-auth.jpeg" alt="" class="img-fluid">
                 </div>
             </div>
         </div>
