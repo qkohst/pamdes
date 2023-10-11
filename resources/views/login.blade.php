@@ -33,7 +33,7 @@
                     </form>
                 </div>
                 <div class="col-md-6 d-none d-md-block">
-                    <img src="../assets/img/bg-auth.jpeg" alt="" class="img-fluid">
+                    <img src="../assets/img/bg-auth.gif" alt="" class="img-fluid">
                 </div>
             </div>
         </div>

@@ -47,21 +47,28 @@
 <script src="../assets/js/atlantis.min.js"></script>
 <!-- Datatables -->
 <script src="../../assets/js/plugin/datatables/datatables.min.js"></script>
+<script src="../../assets/plugins/select2/js/select2.full.min.js"></script>
 
 <!-- Atlantis DEMO methods, don't include it in your project! -->
-<script src="../assets/js/setting-demo.js"></script>
-<script src="../assets/js/demo.js"></script>
+<!-- <script src="../assets/js/setting-demo.js"></script>
+<script src="../assets/js/demo.js"></script> -->
+
+
 <script>
     $(window).on("load", function() {
         $(".loading-container-1").fadeOut(500);
     });
 
+
     $(document).ready(function() {
-        $('#add-row').DataTable({
+        $('.select2').select2();
+
+        $('.datatable').DataTable({
             "pageLength": 10,
         });
     });
 
+    // UNTUK DI HALAMAN DASHBOARD
     Circles.create({
         id: 'circles-1',
         radius: 45,
