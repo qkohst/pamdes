@@ -29,7 +29,7 @@
                                  </a>
                              </li>
                              <li>
-                                 <a href="#logout">
+                                 <a href="{{ route('logout') }}">
                                      <span class="link-collapse">Log Out</span>
                                  </a>
                              </li>
@@ -38,8 +38,8 @@
                  </div>
              </div>
              <ul class="nav nav-primary">
-                 <li class="nav-item active">
-                     <a href="#">
+                 <li class="nav-item">
+                     <a href="/dashboard">
                          <i class="fas fa-home"></i>
                          <p>Dashboard</p>
                      </a>
@@ -54,18 +54,13 @@
                      <div class="collapse" id="sidebarMaster">
                          <ul class="nav nav-collapse">
                              <li>
-                                 <a href="#">
-                                     <span class="sub-item">Master Data</span>
+                                 <a href="/user">
+                                     <span class="sub-item">User</span>
                                  </a>
                              </li>
                              <li>
                                  <a href="#">
-                                     <span class="sub-item">Master Tahun</span>
-                                 </a>
-                             </li>
-                             <li>
-                                 <a href="#">
-                                     <span class="sub-item">Master User</span>
+                                     <span class="sub-item">Pelanggan</span>
                                  </a>
                              </li>
                          </ul>
@@ -80,11 +75,6 @@
                      </a>
                      <div class="collapse" id="sidebarAirku">
                          <ul class="nav nav-collapse">
-                             <li>
-                                 <a href="#">
-                                     <span class="sub-item">Pelanggan</span>
-                                 </a>
-                             </li>
                              <li>
                                  <a href="#">
                                      <span class="sub-item">Tarif Air</span>
@@ -103,6 +93,13 @@
                      <a href="#">
                          <i class="fas fa-file"></i>
                          <p>Laporan</p>
+                     </a>
+                 </li>
+
+                 <li class="nav-item">
+                     <a href="/setting-global">
+                         <i class="fas fa-cog"></i>
+                         <p>Setting Global</p>
                      </a>
                  </li>
              </ul>

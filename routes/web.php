@@ -13,15 +13,32 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    // return view('welcome');
-    return view('index');
-});
-Route::get('/table', function () {
-    // return view('welcome');
-    return view('table');
-});
 
-Route::get('/auth', function () {
-    return view('login');
+
+// Route::get('/', function () {
+//     // return view('welcome');
+//     return view('index');
+// });
+// Route::get('/table', function () {
+//     // return view('welcome');
+//     return view('table');
+// });
+
+// Route::get('/auth', function () {
+//     return view('login');
+// });
+
+Route::get('/', 'AuthController@index')->name('login');
+Route::post('/', 'AuthController@store')->name('login');
+
+Route::group(['middleware' => ['auth']], function () {
+    Route::get('/dashboard', 'DashboardController@index')->name('dashboard');
+    Route::get('/logout', 'AuthController@logout')->name('logout');
+
+    Route::resource('/setting-global', 'SettingGlobalController',  [
+        'uses' => ['index', 'store']
+    ]);
+    Route::resource('/user', 'UserController',  [
+        'uses' => ['index', 'store']
+    ]);
 });

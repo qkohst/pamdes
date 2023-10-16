@@ -15,8 +15,15 @@ class User extends Authenticatable
      *
      * @var array
      */
+    protected $table = 'user';
     protected $fillable = [
-        'name', 'email', 'password',
+        'nama',
+        'username',
+        'password',
+        'role',
+        'status',
+        'avatar',
+        'is_delete'
     ];
 
     /**
@@ -36,4 +43,14 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function getStatusUserAttribute()
+    {
+        if ($this->status == 1) {
+            $status_str = 'Aktif';
+        } elseif ($this->status == 0) {
+            $status_str = 'Non Aktif';
+        }
+        return $status_str;
+    }
 }

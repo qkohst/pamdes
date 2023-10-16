@@ -61,107 +61,186 @@
 
 
     $(document).ready(function() {
+        setActiveSidebar();
         $('.select2').select2();
+    });
 
-        $('.datatable').DataTable({
-            "pageLength": 10,
+    $(".btn-toggle").click(function() {
+        $('#table-data').find('thead').addClass('d-none');
+        params = $('#form-filter').serialize();
+        table.ajax.reload();
+    });
+
+    function setActiveSidebar() {
+        var currentURL = window.location.href;
+
+        // Loop melalui setiap elemen dengan class "nav-item"
+        $('.nav-item').each(function() {
+            var href = $(this).find('a').attr('href');
+
+            if (currentURL.indexOf(href) !== -1) {
+                $(this).addClass('active');
+            }
         });
-    });
 
-    // UNTUK DI HALAMAN DASHBOARD
-    Circles.create({
-        id: 'circles-1',
-        radius: 45,
-        value: 60,
-        maxValue: 100,
-        width: 7,
-        text: 5,
-        colors: ['#f1f1f1', '#FF9E27'],
-        duration: 400,
-        wrpClass: 'circles-wrp',
-        textClass: 'circles-text',
-        styleWrapper: true,
-        styleText: true
-    })
+        $('.collapse').each(function() {
+            var href = $(this).find('a').attr('href');
 
-    Circles.create({
-        id: 'circles-2',
-        radius: 45,
-        value: 70,
-        maxValue: 100,
-        width: 7,
-        text: 36,
-        colors: ['#f1f1f1', '#2BB930'],
-        duration: 400,
-        wrpClass: 'circles-wrp',
-        textClass: 'circles-text',
-        styleWrapper: true,
-        styleText: true
-    })
+            if (currentURL.indexOf(href) !== -1) {
+                $(this).closest('.nav-item').addClass('active');
+                $(this).addClass('show');
+            }
+        });
 
-    Circles.create({
-        id: 'circles-3',
-        radius: 45,
-        value: 40,
-        maxValue: 100,
-        width: 7,
-        text: 12,
-        colors: ['#f1f1f1', '#F25961'],
-        duration: 400,
-        wrpClass: 'circles-wrp',
-        textClass: 'circles-text',
-        styleWrapper: true,
-        styleText: true
-    })
+        $('li').each(function() {
+            var href = $(this).find('a').attr('href');
 
-    var totalIncomeChart = document.getElementById('totalIncomeChart').getContext('2d');
+            if (currentURL.indexOf(href) !== -1) {
+                $(this).addClass('active');
+            }
+        });
+    }
 
-    var mytotalIncomeChart = new Chart(totalIncomeChart, {
-        type: 'bar',
-        data: {
-            labels: ["S", "M", "T", "W", "T", "F", "S", "S", "M", "T"],
-            datasets: [{
-                label: "Total Income",
-                backgroundColor: '#ff9e27',
-                borderColor: 'rgb(23, 125, 255)',
-                data: [6, 4, 9, 5, 4, 6, 4, 3, 8, 10],
-            }],
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            legend: {
-                display: false,
-            },
-            scales: {
-                yAxes: [{
-                    ticks: {
-                        display: false //this will remove only the label
-                    },
-                    gridLines: {
-                        drawBorder: false,
-                        display: false
-                    }
-                }],
-                xAxes: [{
-                    gridLines: {
-                        drawBorder: false,
-                        display: false
-                    }
-                }]
-            },
-        }
-    });
+    function resetForm(form_id) {
+        $('#' + form_id).find('input').each(function() {
+            if ($(this).attr('type') == 'radio') {
+                $(this).prop('checked', false);
+            } else {
+                $(this).val('');
+            }
+            let name = $(this).attr('name');
+            name = name.replaceAll("[]", "");
+            $('.' + name + '-invalid-message').remove();
+        });
 
-    $('#lineChart').sparkline([105, 103, 123, 100, 95, 105, 115], {
-        type: 'line',
-        height: '70',
-        width: '100%',
-        lineWidth: '2',
-        lineColor: '#ffa534',
-        fillColor: 'rgba(255, 165, 52, .14)'
-    });
+        $('#' + form_id).find('select.form-control').each(function() {
+            $(this).val('');
+            $(this).trigger('change.select2');
+            let name = $(this).attr('name');
+            name = name.replaceAll("[]", "");
+            $('.' + name + '-invalid-message').remove();
+        });
+
+        $('#' + form_id).find('textarea').each(function() {
+            $(this).empty();
+            $(this).val('');
+            let name = $(this).attr('name');
+            name = name.replaceAll("[]", "");
+            $('.' + name + '-invalid-message').remove();
+        });
+
+        $('#' + form_id).find('.note-editable').each(function() {
+            $(this).empty();
+        });
+
+        $('#' + form_id).find('.duallistbox').each(function() {
+            $(this).val([]).trigger('change');
+            $(this).removeClass('is-invalid');
+            let name = $(this).attr('name');
+            name = name.replaceAll("[]", "");
+            $('.' + name + '-invalid-message').remove();
+            $('#form-dual-listbox').empty();
+        });
+
+    }
+
+    // // UNTUK DI HALAMAN DASHBOARD
+    // Circles.create({
+    //     id: 'circles-1',
+    //     radius: 45,
+    //     value: 60,
+    //     maxValue: 100,
+    //     width: 7,
+    //     text: 5,
+    //     colors: ['#f1f1f1', '#FF9E27'],
+    //     duration: 400,
+    //     wrpClass: 'circles-wrp',
+    //     textClass: 'circles-text',
+    //     styleWrapper: true,
+    //     styleText: true
+    // })
+
+    // Circles.create({
+    //     id: 'circles-2',
+    //     radius: 45,
+    //     value: 70,
+    //     maxValue: 100,
+    //     width: 7,
+    //     text: 36,
+    //     colors: ['#f1f1f1', '#2BB930'],
+    //     duration: 400,
+    //     wrpClass: 'circles-wrp',
+    //     textClass: 'circles-text',
+    //     styleWrapper: true,
+    //     styleText: true
+    // })
+
+    // Circles.create({
+    //     id: 'circles-3',
+    //     radius: 45,
+    //     value: 40,
+    //     maxValue: 100,
+    //     width: 7,
+    //     text: 12,
+    //     colors: ['#f1f1f1', '#F25961'],
+    //     duration: 400,
+    //     wrpClass: 'circles-wrp',
+    //     textClass: 'circles-text',
+    //     styleWrapper: true,
+    //     styleText: true
+    // })
+
+    // var totalIncomeChart = document.getElementById('totalIncomeChart').getContext('2d');
+
+    // var mytotalIncomeChart = new Chart(totalIncomeChart, {
+    //     type: 'bar',
+    //     data: {
+    //         labels: ["S", "M", "T", "W", "T", "F", "S", "S", "M", "T"],
+    //         datasets: [{
+    //             label: "Total Income",
+    //             backgroundColor: '#ff9e27',
+    //             borderColor: 'rgb(23, 125, 255)',
+    //             data: [6, 4, 9, 5, 4, 6, 4, 3, 8, 10],
+    //         }],
+    //     },
+    //     options: {
+    //         responsive: true,
+    //         maintainAspectRatio: false,
+    //         legend: {
+    //             display: false,
+    //         },
+    //         scales: {
+    //             yAxes: [{
+    //                 ticks: {
+    //                     display: false //this will remove only the label
+    //                 },
+    //                 gridLines: {
+    //                     drawBorder: false,
+    //                     display: false
+    //                 }
+    //             }],
+    //             xAxes: [{
+    //                 gridLines: {
+    //                     drawBorder: false,
+    //                     display: false
+    //                 }
+    //             }]
+    //         },
+    //     }
+    // });
+
+    // $('#lineChart').sparkline([105, 103, 123, 100, 95, 105, 115], {
+    //     type: 'line',
+    //     height: '70',
+    //     width: '100%',
+    //     lineWidth: '2',
+    //     lineColor: '#ffa534',
+    //     fillColor: 'rgba(255, 165, 52, .14)'
+    // });
 </script>
+@if(isset($pagejs))
+<script src="../assets/js/pages/{{$pagejs}}"></script>
+@endif
 </body>
 
 </html>

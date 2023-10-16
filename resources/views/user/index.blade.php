@@ -10,38 +10,38 @@
                 </button>
             </div>
             <div id="collapseFilter" class="collapse" aria-labelledby="headingFilter" data-parent="#accordionExample">
-                <div class="card-body py-0">
-                    <div class="row">
-                        <div class="col-sm-4">
-                            <div class="form-group">
-                                <label for="input">Example Input</label>
-                                <input type="text" class="form-control" id="input" placeholder="Input Data">
+                <form id="form-filter">
+                    <div class="card-body py-0">
+                        <div class="row">
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <label for="filter_nama">Nama</label>
+                                    <input type="text" class="form-control" id="filter_nama" name="filter_nama" placeholder="Nama">
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-sm-4">
-                            <div class="form-group">
-                                <label for="input">Example Input</label>
-                                <input type="text" class="form-control" id="input" placeholder="Input Data">
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <label for="filter_username">Username</label>
+                                    <input type="text" class="form-control" id="filter_username" name="filter_username" placeholder="Username">
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-sm-4">
-                            <div class="form-group">
-                                <label for="select">Example select2</label>
-                                <select class="form-control select2" id="select" style="width: 100%;">
-                                    <option>1</option>
-                                    <option>2</option>
-                                    <option>3</option>
-                                    <option>4</option>
-                                    <option>5</option>
-                                </select>
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <label for="filter_status">Status</label>
+                                    <select class="form-control select2" id="filter_status" name="filter_status" style="width: 100%;">
+                                        <option value="">Semua Status</option>
+                                        <option value="1">Aktif</option>
+                                        <option value="0">Non Aktif</option>
+                                    </select>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="card-footer text-right">
-                    <button class="btn btn-sm btn-default" type="button" data-toggle="collapse" data-target="#collapseFilter" aria-expanded="false" aria-controls="collapseFilter">RESET</button>
-                    <button class="btn btn-sm btn-primary" type="submit" type="button" data-toggle="collapse" data-target="#collapseFilter" aria-expanded="false" aria-controls="collapseFilter">FILTER</button>
-                </div>
+                    <div class="card-footer text-right">
+                        <button class="btn btn-sm btn-default" id="btn-reset" type="button" data-toggle="collapse" data-target="#collapseFilter" aria-expanded="false" aria-controls="collapseFilter">RESET</button>
+                        <button class="btn btn-sm btn-primary" type="submit" type="button" data-toggle="collapse" data-target="#collapseFilter" aria-expanded="false" aria-controls="collapseFilter">FILTER</button>
+                    </div>
+                </form>
             </div>
         </div>
         <div class="row">
@@ -49,7 +49,7 @@
                 <div class="card">
                     <div class="card-header">
                         <div class="d-flex align-items-center">
-                            <h4 class="card-title">Table</h4>
+                            <h4 class="card-title">{{$title}}</h4>
                             <button class="btn btn-primary btn-round btn-sm ml-auto" data-toggle="modal" data-target="#modalAddData">
                                 <i class="fa fa-plus mr-1"></i>
                                 TAMBAH
@@ -128,14 +128,14 @@
                             <table id="table-data" class="datatable display table table-striped table-hover">
                                 <thead>
                                     <tr>
-                                        <th style="width: 10%">Action</th>
-                                        <th>Name</th>
-                                        <th>Position</th>
-                                        <th>Office</th>
+                                        <th style="width: 10%;">Aksi</th>
+                                        <th>Nama</th>
+                                        <th>Username</th>
+                                        <th>Status</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
+                                    <!-- <tr>
                                         <td>
                                             <div class="form-button-action">
                                                 <button type="button" data-toggle="tooltip" title="" class="btn btn-action btn-sm btn-success" data-original-title="View">
@@ -314,7 +314,7 @@
                                         <td>Sonya Frost</td>
                                         <td>Software Engineer</td>
                                         <td>Edinburgh</td>
-                                    </tr>
+                                    </tr> -->
                                 </tbody>
                             </table>
                         </div>
