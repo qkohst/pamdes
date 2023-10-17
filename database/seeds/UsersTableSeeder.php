@@ -17,7 +17,6 @@ class UsersTableSeeder extends Seeder
             'username' => 'adminpamdes@mail.com',
             'password' => bcrypt('admin123456'),
             'role' => '1',
-            'status' => true,
             'avatar' => 'default.png',
         ]);
     }

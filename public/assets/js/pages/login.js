@@ -4,7 +4,7 @@ $("#form-login").on("submit", function (e) {
 
     let isValid = checkValidateForm();
     if (isValid == true) {
-        $(".loading-container").fadeIn(100);
+        $(".loading-container-1").fadeIn(100);
         let username = $("input[name=username]").val();
         let password = $("input[name=password]").val();
         $.ajax({
@@ -16,7 +16,7 @@ $("#form-login").on("submit", function (e) {
             },
             dataType: 'json',
             success: function (data, jqXHR) {
-                $(".loading-container").fadeOut(100);
+                $(".loading-container-1").fadeOut(100);
                 if (data.status == 'success') {
                     swal("", data.message, "success")
                     window.location.href = "/dashboard";
@@ -25,7 +25,7 @@ $("#form-login").on("submit", function (e) {
                 }
             },
             error: function (data, jqXHR) {
-                $(".loading-container").fadeOut(100);
+                $(".loading-container-1").fadeOut(100);
                 sweetAlert("", jqXHR.status, "error")
             }
         });

@@ -81,7 +81,7 @@
     function setActiveSidebar() {
         var currentURL = window.location.href;
 
-        // Loop melalui setiap elemen dengan class "nav-item"
+        // untuk main menu 
         $('.nav-item').each(function() {
             var href = $(this).find('a').attr('href');
 
@@ -90,20 +90,14 @@
             }
         });
 
-        $('.collapse').each(function() {
-            var href = $(this).find('a').attr('href');
-
-            if (currentURL.indexOf(href) !== -1) {
-                $(this).closest('.nav-item').addClass('active');
-                $(this).addClass('show');
-            }
-        });
-
-        $('li').each(function() {
+        // untuk submenu
+        $('.sub-menu').each(function() {
             var href = $(this).find('a').attr('href');
 
             if (currentURL.indexOf(href) !== -1) {
                 $(this).addClass('active');
+                $(this).closest('.nav-item').addClass('active');
+                $(this).closest('.collapse').addClass('show');
             }
         });
     }
@@ -169,6 +163,8 @@
         $('#' + form_id).find('input').each(function() {
             if ($(this).attr('type') == 'radio') {
                 $(this).prop('checked', false);
+            } else if ($(this).hasClass('uppercase')) {
+                $(this).val('<AUTO GENERATE>');
             } else {
                 $(this).val('');
             }
@@ -217,99 +213,24 @@
         resetForm('form-edit');
     });
 
-    // // UNTUK DI HALAMAN DASHBOARD
-    // Circles.create({
-    //     id: 'circles-1',
-    //     radius: 45,
-    //     value: 60,
-    //     maxValue: 100,
-    //     width: 7,
-    //     text: 5,
-    //     colors: ['#f1f1f1', '#FF9E27'],
-    //     duration: 400,
-    //     wrpClass: 'circles-wrp',
-    //     textClass: 'circles-text',
-    //     styleWrapper: true,
-    //     styleText: true
-    // })
+    $('.hanya-angka').on('input', function() {
+        this.value = this.value.replace(/[^0-9]/g, '');
+    });
 
-    // Circles.create({
-    //     id: 'circles-2',
-    //     radius: 45,
-    //     value: 70,
-    //     maxValue: 100,
-    //     width: 7,
-    //     text: 36,
-    //     colors: ['#f1f1f1', '#2BB930'],
-    //     duration: 400,
-    //     wrpClass: 'circles-wrp',
-    //     textClass: 'circles-text',
-    //     styleWrapper: true,
-    //     styleText: true
-    // })
+    $('.no-spasi').on('input', function() {
+        this.value = this.value.replace(/\s/g, '');
+    });
 
-    // Circles.create({
-    //     id: 'circles-3',
-    //     radius: 45,
-    //     value: 40,
-    //     maxValue: 100,
-    //     width: 7,
-    //     text: 12,
-    //     colors: ['#f1f1f1', '#F25961'],
-    //     duration: 400,
-    //     wrpClass: 'circles-wrp',
-    //     textClass: 'circles-text',
-    //     styleWrapper: true,
-    //     styleText: true
-    // })
+    $('.first-uppercase').on('input', function() {
+        let entered = $(this).val();
+        let firstLetter = entered.charAt(0).toUpperCase();
+        let rest = entered.substring(1);
+        $(this).val(firstLetter + rest);
+    });
 
-    // var totalIncomeChart = document.getElementById('totalIncomeChart').getContext('2d');
-
-    // var mytotalIncomeChart = new Chart(totalIncomeChart, {
-    //     type: 'bar',
-    //     data: {
-    //         labels: ["S", "M", "T", "W", "T", "F", "S", "S", "M", "T"],
-    //         datasets: [{
-    //             label: "Total Income",
-    //             backgroundColor: '#ff9e27',
-    //             borderColor: 'rgb(23, 125, 255)',
-    //             data: [6, 4, 9, 5, 4, 6, 4, 3, 8, 10],
-    //         }],
-    //     },
-    //     options: {
-    //         responsive: true,
-    //         maintainAspectRatio: false,
-    //         legend: {
-    //             display: false,
-    //         },
-    //         scales: {
-    //             yAxes: [{
-    //                 ticks: {
-    //                     display: false //this will remove only the label
-    //                 },
-    //                 gridLines: {
-    //                     drawBorder: false,
-    //                     display: false
-    //                 }
-    //             }],
-    //             xAxes: [{
-    //                 gridLines: {
-    //                     drawBorder: false,
-    //                     display: false
-    //                 }
-    //             }]
-    //         },
-    //     }
-    // });
-
-    // $('#lineChart').sparkline([105, 103, 123, 100, 95, 105, 115], {
-    //     type: 'line',
-    //     height: '70',
-    //     width: '100%',
-    //     lineWidth: '2',
-    //     lineColor: '#ffa534',
-    //     fillColor: 'rgba(255, 165, 52, .14)'
-    // });
+    $('.uppercase').on('input', function() {
+        this.value = this.value.toUpperCase();
+    });
 </script>
 @if(isset($pagejs))
 <script src="../assets/js/pages/{{$pagejs}}"></script>

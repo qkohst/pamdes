@@ -6,7 +6,7 @@ $(document).ready(function () {
         processing: true,
         serverSide: true,
         ajax: {
-            url: "/user",
+            url: "/pelanggan",
             data: function (d) {
                 d.filter_record = params;
             }
@@ -16,16 +16,24 @@ $(document).ready(function () {
                 name: "action"
             },
             {
-                data: "nama",
-                name: "nama"
+                data: "kode",
+                name: "kode"
             },
             {
-                data: "username",
-                name: "username"
+                data: "nama_lengkap",
+                name: "nama_lengkap"
             },
             {
-                data: "status_user",
-                name: "status_user"
+                data: "nomor_hp_wa",
+                name: "nomor_hp_wa"
+            },
+            {
+                data: "alamat",
+                name: "alamat"
+            },
+            {
+                data: "status_pelanggan",
+                name: "status_pelanggan"
             },
         ],
         columnDefs: [{
@@ -58,31 +66,43 @@ $("#btn-reset").click(function (e) {
     table.ajax.reload();
 });
 
+$('#kode_pelanggan').focus(function(){
+    if($(this).val() == '<AUTO GENERATE>'){
+        $(this).val('');
+    }
+});
+
+$('#kode_pelanggan').focusout(function(){
+    if($(this).val() == ''){
+        $(this).val('<AUTO GENERATE>');
+    }
+})
+
 // SAVE DATA
 $("#btn-save").click(function (e) {
     e.preventDefault();
     let isValid = checkValidateForm('form-add');
     if (isValid == true) {
         let form = $('#form-add');
-        let nama = form.find("input[name=nama]").val();
-        let username = form.find("input[name=username]").val();
-        let password = form.find("input[name=password]").val();
-        let konfirmasi_password = form.find("input[name=konfirmasi_password]").val();
+        let kode_pelanggan = form.find("input[name=kode_pelanggan]").val();
+        let nama_lengkap = form.find("input[name=nama_lengkap]").val();
+        let nomor_hp_wa = form.find("input[name=nomor_hp_wa]").val();
+        let alamat = form.find("textarea[name=alamat]").val();
 
-        if (username.indexOf(' ') !== -1) {
-            invalidMessage(form.find("input[name=username]"), 'Username tidak boleh mengandung spasi');
+        if(kode_pelanggan != '<AUTO GENERATE>' && kode_pelanggan.length > 7){
+            invalidMessage(form.find("input[name=kode_pelanggan]"), 'Kode pelanggan maximal 7 karakter');
             return false;
         }
-        if (password.indexOf(' ') !== -1) {
-            invalidMessage(form.find("input[name=password]"), 'Password tidak boleh mengandung spasi');
+        if(nama_lengkap.length > 100){
+            invalidMessage(form.find("input[name=nama_lengkap]"), 'Nama lengkap maximal 100 karakter');
             return false;
         }
-        if(password.length < 8){
-            invalidMessage(form.find("input[name=password]"), 'Password minimal 8 karakter');
+        if(nomor_hp_wa.length > 13){
+            invalidMessage(form.find("input[name=nomor_hp_wa]"), 'Nomor hp wa maximal 13 karakter');
             return false;
         }
-        if(password != konfirmasi_password){
-            invalidMessage(form.find("input[name=konfirmasi_password]"), 'Konfirmasi password tidak sesuai');
+        if(alamat.length > 255){
+            invalidMessage(form.find("textarea[name=alamat]"), 'Alamat maximal 255 karakter');
             return false;
         }
 
@@ -100,11 +120,12 @@ $("#btn-save").click(function (e) {
                 $(".loading-container-1").fadeIn(100);
                 $.ajax({
                     type: 'POST',
-                    url: "/user",
+                    url: "/pelanggan",
                     data: {
-                        nama: nama,
-                        username: username,
-                        password: password
+                        kode_pelanggan: kode_pelanggan,
+                        nama_lengkap: nama_lengkap,
+                        nomor_hp_wa: nomor_hp_wa,
+                        alamat: alamat,
                     },
                     dataType: 'json',
                     success: function (data, jqXHR) {
@@ -134,13 +155,16 @@ $(document).on('click', '.btn-edit', function (e) {
     $(".loading-container-1").fadeIn(100);
     $.ajax({
         type: 'GET',
-        url: "/user/" + dataID,
+        url: "/pelanggan/" + dataID,
         dataType: 'json',
         success: function (data, jqXHR) {
+            console.log(data);
             let form = $('#form-edit');
-            form.find("input[name=user_id]").val(data.user_id);
-            form.find("input[name=nama]").val(data.nama);
-            form.find("input[name=username]").val(data.username);
+            form.find("input[name=pelanggan_id]").val(data.pelanggan_id);
+            form.find("input[name=kode_pelanggan]").val(data.kode_pelanggan);
+            form.find("input[name=nama_lengkap]").val(data.nama_lengkap);
+            form.find("input[name=nomor_hp_wa]").val(data.nomor_hp_wa);
+            form.find("textarea[name=alamat]").val(data.alamat);
             form.find("select[name=status]").val(data.status).trigger("change");
             $(".loading-container-1").fadeOut(100);
         },
@@ -157,27 +181,22 @@ $("#btn-update").click(function (e) {
     let isValid = checkValidateForm('form-edit');
     if (isValid == true) {
         let form = $('#form-edit');
-        let user_id = form.find("input[name=user_id]").val();
-        let nama = form.find("input[name=nama]").val();
-        let username = form.find("input[name=username]").val();
+        let pelanggan_id = form.find("input[name=pelanggan_id]").val();
+        let nama_lengkap = form.find("input[name=nama_lengkap]").val();
+        let nomor_hp_wa = form.find("input[name=nomor_hp_wa]").val();
+        let alamat = form.find("textarea[name=alamat]").val();
         let status = form.find("select[name=status]").val();
-        let password = form.find("input[name=password]").val();
-        let konfirmasi_password = form.find("input[name=konfirmasi_password]").val();
 
-        if (username.indexOf(' ') !== -1) {
-            invalidMessage(form.find("input[name=username]"), 'Username tidak boleh mengandung spasi');
+        if(nama_lengkap.length > 100){
+            invalidMessage(form.find("input[name=nama_lengkap]"), 'Nama lengkap maximal 100 karakter');
             return false;
         }
-        if (password != '' && password.indexOf(' ') !== -1) {
-            invalidMessage(form.find("input[name=password]"), 'Password tidak boleh mengandung spasi');
+        if(nomor_hp_wa.length > 13){
+            invalidMessage(form.find("input[name=nomor_hp_wa]"), 'Nomor hp wa maximal 13 karakter');
             return false;
         }
-        if(password != '' && password.length < 8){
-            invalidMessage(form.find("input[name=password]"), 'Password minimal 8 karakter');
-            return false;
-        }
-        if(password != '' && password != konfirmasi_password){
-            invalidMessage(form.find("input[name=konfirmasi_password]"), 'Konfirmasi password tidak sesuai');
+        if(alamat.length > 255){
+            invalidMessage(form.find("textarea[name=alamat]"), 'Alamat maximal 255 karakter');
             return false;
         }
 
@@ -195,12 +214,12 @@ $("#btn-update").click(function (e) {
                 $(".loading-container-1").fadeIn(100);
                 $.ajax({
                     type: 'PUT',
-                    url: "/user/" + user_id,
+                    url: "/pelanggan/" + pelanggan_id,
                     data: {
-                        nama: nama,
-                        username: username,
+                        nama_lengkap: nama_lengkap,
+                        nomor_hp_wa: nomor_hp_wa,
+                        alamat: alamat,
                         status: status,
-                        password: password
                     },
                     dataType: 'json',
                     success: function (data, jqXHR) {
@@ -241,7 +260,7 @@ $(document).on('click', '.btn-delete', function (e) {
             $(".loading-container-1").fadeIn(100);
             $.ajax({
                 type: 'DELETE',
-                url: "/user/" + dataID,
+                url: "/pelanggan/" + dataID,
                 dataType: 'json',
                 success: function (data, jqXHR) {
                     $(".loading-container-1").fadeOut(100);

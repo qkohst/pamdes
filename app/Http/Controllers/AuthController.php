@@ -18,30 +18,25 @@ class AuthController extends Controller
 
     public function store(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            'username' => 'required|exists:user',
-            'password' => 'required|min:6',
-        ]);
-        if ($validator->fails()) {
+        $user_login = User::where('username', $request->username)->where('is_delete', false)->first();
+        if (!$user_login) {
             $response = [
                 'status'  => 'error',
-                'message' => $validator->messages()->all()[0]
+                'message' => 'Username tidak ditemukan'
             ];
             return response()->json($response, 200);
         }
-
-        $user_login = User::where('username', $request->username)->first();
         if ($user_login->status == false) {
             $response = [
                 'status'  => 'error',
-                'message' => 'toast_error', 'User ' . $user_login->username . ' telah dinonaktifkan'
+                'message' => 'User ' . $user_login->username . ' telah dinonaktifkan'
             ];
             return response()->json($response, 200);
         }
         if (!Auth::attempt(['username' => $request->username, 'password' => $request->password])) {
             $response = [
                 'status'  => 'error',
-                'message' => 'password salah'
+                'message' => 'Password salah'
             ];
             return response()->json($response, 200);
         }

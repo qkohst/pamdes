@@ -15,14 +15,14 @@
                         <div class="row">
                             <div class="col-sm-4">
                                 <div class="form-group">
-                                    <label for="filter_nama">Nama</label>
-                                    <input type="text" class="form-control" id="filter_nama" name="filter_nama" placeholder="Nama">
+                                    <label for="filter_kode">Kode</label>
+                                    <input type="text" class="form-control" id="filter_kode" name="filter_kode" placeholder="Kode">
                                 </div>
                             </div>
                             <div class="col-sm-4">
                                 <div class="form-group">
-                                    <label for="filter_username">Username</label>
-                                    <input type="text" class="form-control" id="filter_username" name="filter_username" placeholder="Username">
+                                    <label for="filter_nama_lengkap">Nama Lengkap</label>
+                                    <input type="text" class="form-control" id="filter_nama_lengkap" name="filter_nama_lengkap" placeholder="Nama Lengkap">
                                 </div>
                             </div>
                             <div class="col-sm-4">
@@ -62,8 +62,10 @@
                                 <thead>
                                     <tr>
                                         <th style="width: 10%;">Aksi</th>
-                                        <th>Nama</th>
-                                        <th>Username</th>
+                                        <th>Kode</th>
+                                        <th>Nama Lengkap</th>
+                                        <th>Nomor HP/WA</th>
+                                        <th>Alamat</th>
                                         <th>Status</th>
                                     </tr>
                                 </thead>
@@ -96,26 +98,26 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">
-                                <label for="nama">Nama</label>
-                                <input type="text" class="form-control first-uppercase required" id="nama" name="nama">
+                                <label for="kode_pelanggan">Kode Pelanggan</label>
+                                <input type="text" class="form-control no-spasi uppercase required" id="kode_pelanggan" name="kode_pelanggan" value="<AUTO GENERATE>">
                             </div>
                         </div>
                         <div class="col-md-12">
                             <div class="form-group pt-0">
-                                <label for="username">Username</label>
-                                <input type="text" class="form-control no-spasi required" id="username" name="username">
+                                <label for="nama_lengkap">Nama Lengkap</label>
+                                <input type="text" class="form-control first-uppercase required" id="nama_lengkap" name="nama_lengkap">
                             </div>
                         </div>
                         <div class="col-md-12">
                             <div class="form-group pt-0">
-                                <label for="password">Password</label>
-                                <input type="password" class="form-control no-spasi required" id="password" name="password">
+                                <label for="nomor_hp_wa">Nomor HP/WA</label>
+                                <input type="text" class="form-control hanya-angka required" id="nomor_hp_wa" name="nomor_hp_wa">
                             </div>
                         </div>
                         <div class="col-md-12">
                             <div class="form-group pt-0">
-                                <label for="konfirmasi_password">Konfirmasi Password</label>
-                                <input type="password" class="form-control no-spasi required" id="konfirmasi_password" name="konfirmasi_password">
+                                <label for="alamat">Alamat</label>
+                                <textarea class="form-control first-uppercase required" id="alamat" name="alamat" rows="3"></textarea>
                             </div>
                         </div>
                     </div>
@@ -145,17 +147,29 @@
             <div class="modal-body py-0">
                 <form id="form-edit">
                     <div class="row">
-                        <input type="hidden" name="user_id">
+                        <input type="hidden" name="pelanggan_id">
                         <div class="col-md-12">
                             <div class="form-group">
-                                <label for="nama">Nama</label>
-                                <input type="text" class="form-control first-uppercase required" id="nama" name="nama">
+                                <label for="kode_pelanggan">Kode Pelanggan</label>
+                                <input type="text" class="form-control no-spasi uppercase required" id="kode_pelanggan" name="kode_pelanggan" disabled>
                             </div>
                         </div>
                         <div class="col-md-12">
                             <div class="form-group pt-0">
-                                <label for="username">Username</label>
-                                <input type="text" class="form-control no-spasi required" id="username" name="username">
+                                <label for="nama_lengkap">Nama Lengkap</label>
+                                <input type="text" class="form-control first-uppercase required" id="nama_lengkap" name="nama_lengkap">
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group pt-0">
+                                <label for="nomor_hp_wa">Nomor HP/WA</label>
+                                <input type="text" class="form-control hanya-angka required" id="nomor_hp_wa" name="nomor_hp_wa">
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group pt-0">
+                                <label for="alamat">Alamat</label>
+                                <textarea class="form-control first-uppercase required" id="alamat" name="alamat" rows="3"></textarea>
                             </div>
                         </div>
                         <div class="col-md-12">
@@ -165,23 +179,6 @@
                                     <option value="1">Aktif</option>
                                     <option value="0">Non Aktif</option>
                                 </select>
-                            </div>
-                        </div>
-                        <div class="col-md-12">
-                            <div class="form-group border-bottom">
-                                <small class="form-text text-danger">* Hanya diisi ketika ingin ganti password</small>
-                            </div>
-                        </div>
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <label for="password">Password <span class="text-danger">*</span></label>
-                                <input type="password" class="form-control no-spasi" id="password" name="password">
-                            </div>
-                        </div>
-                        <div class="col-md-12">
-                            <div class="form-group pt-0">
-                                <label for="konfirmasi_password">Konfirmasi Password <span class="text-danger">*</span></label>
-                                <input type="password" class="form-control no-spasi" id="konfirmasi_password" name="konfirmasi_password">
                             </div>
                         </div>
                     </div>

@@ -39,6 +39,9 @@ Route::group(['middleware' => ['auth']], function () {
         'uses' => ['index', 'store']
     ]);
     Route::resource('/user', 'UserController',  [
-        'uses' => ['index', 'store']
+        'uses' => ['index', 'store', 'show', 'update', 'destroy']
+    ]);
+    Route::resource('/pelanggan', 'PelangganController',  [
+        'uses' => ['index', 'store', 'show', 'update', 'destroy']
     ]);
 });

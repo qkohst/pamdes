@@ -18,17 +18,17 @@
 
                      <div class="collapse in" id="collapseExample">
                          <ul class="nav">
-                             <li>
+                             <li class="sub-menu">
                                  <a href="#profile">
                                      <span class="link-collapse">My Profile</span>
                                  </a>
                              </li>
-                             <li>
+                             <li class="sub-menu">
                                  <a href="#edit">
                                      <span class="link-collapse">Edit Profile</span>
                                  </a>
                              </li>
-                             <li>
+                             <li class="sub-menu">
                                  <a href="{{ route('logout') }}">
                                      <span class="link-collapse">Log Out</span>
                                  </a>
@@ -53,13 +53,13 @@
                      </a>
                      <div class="collapse" id="sidebarMaster">
                          <ul class="nav nav-collapse">
-                             <li>
+                             <li class="sub-menu">
                                  <a href="/user">
                                      <span class="sub-item">User</span>
                                  </a>
                              </li>
-                             <li>
-                                 <a href="#">
+                             <li class="sub-menu">
+                                 <a href="/pelanggan">
                                      <span class="sub-item">Pelanggan</span>
                                  </a>
                              </li>
@@ -75,12 +75,12 @@
                      </a>
                      <div class="collapse" id="sidebarAirku">
                          <ul class="nav nav-collapse">
-                             <li>
+                             <li class="sub-menu">
                                  <a href="#">
                                      <span class="sub-item">Tarif Air</span>
                                  </a>
                              </li>
-                             <li>
+                             <li class="sub-menu">
                                  <a href="#">
                                      <span class="sub-item">Pemakaian/Transaksi</span>
                                  </a>

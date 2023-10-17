@@ -72,15 +72,11 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            'nama' => 'max:100',
-            'username' => 'max:100|unique:user',
-        ]);
-
-        if ($validator->fails()) {
+        $is_duplicate = User::where('username', strtolower($request->username))->where('is_delete', false)->first();
+        if (!is_null($is_duplicate)) {
             $response = [
                 'status'  => 'error',
-                'message' => $validator->messages()->all()[0]
+                'message' => 'Username ' . $request->username . ' telah digunakan'
             ];
             return response()->json($response, 200);
         }
@@ -90,7 +86,6 @@ class UserController extends Controller
         $user->username = strtolower($request->username);
         $user->password = bcrypt($request->password);
         $user->role = 1;
-        $user->status = true;
         $user->avatar = 'default.png';
         $user->save();
 
@@ -129,11 +124,11 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $checkUsername = User::where('username', strtolower($request->username))->where('id', '!=', $id)->first();
-        if (!is_null($checkUsername)) {
+        $is_duplicate = User::where('username', strtolower($request->username))->where('id', '!=', $id)->where('is_delete', 1)->first();
+        if (!is_null($is_duplicate)) {
             $response = [
                 'status'  => 'error',
-                'message' => 'username ' . $request->username . ' telah digunakan'
+                'message' => 'Username ' . $request->username . ' telah digunakan'
             ];
             return response()->json($response, 200);
         }
