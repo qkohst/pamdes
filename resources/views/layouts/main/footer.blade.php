@@ -41,7 +41,8 @@
 <script src="../assets/js/plugin/jqvmap/maps/jquery.vmap.world.js"></script>
 
 <!-- Sweet Alert -->
-<script src="../assets/js/plugin/sweetalert/sweetalert.min.js"></script>
+<!-- <script src="../assets/js/plugin/sweetalert/sweetalert.min.js"></script> -->
+<script src="../assets/auth/plugins/sweetalert2/dist/sweetalert2.min.js"></script>
 
 <!-- Atlantis JS -->
 <script src="../assets/js/atlantis.min.js"></script>
@@ -57,6 +58,12 @@
 <script>
     $(window).on("load", function() {
         $(".loading-container-1").fadeOut(500);
+    });
+
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
     });
 
 
@@ -101,6 +108,63 @@
         });
     }
 
+    function checkValidateForm(form_id) {
+        let result = true;
+        // validate required
+        $('#' + form_id).find('.required').each(function() {
+            // $(this).removeClass('is-invalid');
+            let val = $(this).val();
+            let name = $(this).attr('name');
+            name = name.replaceAll("[]", "");
+            $('.' + name + '-invalid-message').remove();
+
+            if (val == '' || val == []) {
+                // $(this).addClass('is-invalid');
+                let message_name = name.replaceAll("_", " ");
+                message_name = message_name.charAt(0).toUpperCase() + message_name.slice(1);
+                let invalid_message = `<span class="text-sm text-danger ${name}-invalid-message">${message_name} wajib diisi</span>`;
+                let div = $(this).closest('div');
+                div.append(invalid_message);
+                result = false;
+            }
+        });
+        return result;
+    }
+
+    function invalidMessage(form, message) {
+        let name = form.attr('name');
+        name = name.replaceAll("[]", "");
+        $('.' + name + '-invalid-message').remove();
+        let invalid_message = `<span class="text-sm text-danger ${name}-invalid-message">${message}</span>`;
+        let div = form.closest('div');
+        div.append(invalid_message);
+        form.focus();
+    }
+
+    $(document).on('keyup', '.form-control', function(e) {
+        e.preventDefault();
+        $(this).removeClass('is-invalid');
+        let name = $(this).attr('name');
+        name = name.replaceAll("[]", "");
+        $('.' + name + '-invalid-message').remove();
+    });
+
+    $(document).on('change', '.form-control', function(e) {
+        e.preventDefault();
+        $(this).removeClass('is-invalid');
+        let name = $(this).attr('name');
+        name = name.replaceAll("[]", "");
+        $('.' + name + '-invalid-message').remove();
+    });
+
+    $('.custom-file-input').change(function() {
+        var fileName = $(this).val().split('\\').pop();
+        $(this).next('.custom-file-label').html(fileName);
+
+        let name = $(this).attr('name');
+        $('.' + name + '-invalid-message').remove();
+    });
+
     function resetForm(form_id) {
         $('#' + form_id).find('input').each(function() {
             if ($(this).attr('type') == 'radio') {
@@ -114,7 +178,8 @@
         });
 
         $('#' + form_id).find('select.form-control').each(function() {
-            $(this).val('');
+            let first_val = $(this).find('option:first').val();
+            $(this).val(first_val);
             $(this).trigger('change.select2');
             let name = $(this).attr('name');
             name = name.replaceAll("[]", "");
@@ -143,6 +208,14 @@
         });
 
     }
+
+    $('#modalAddData').on('hidden.bs.modal', function() {
+        resetForm('form-add');
+    });
+
+    $('#modalEditData').on('hidden.bs.modal', function() {
+        resetForm('form-edit');
+    });
 
     // // UNTUK DI HALAMAN DASHBOARD
     // Circles.create({

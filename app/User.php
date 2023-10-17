@@ -44,6 +44,16 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    public function getLevelUserAttribute()
+    {
+        if ($this->role == 1) {
+            $level_user = 'Administrator';
+        } elseif ($this->role == 2) {
+            $level_user = 'Pelanggan';
+        }
+        return $level_user;
+    }
+
     public function getStatusUserAttribute()
     {
         if ($this->status == 1) {

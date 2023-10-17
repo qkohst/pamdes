@@ -61,9 +61,31 @@ $("#btn-reset").click(function (e) {
 // SAVE DATA
 $("#btn-save").click(function (e) {
     e.preventDefault();
-    let isValid = checkValidateForm('tambah-user');
-
+    let isValid = checkValidateForm('form-add');
     if (isValid == true) {
+        let form = $('#form-add');
+        let nama = form.find("input[name=nama]").val();
+        let username = form.find("input[name=username]").val();
+        let password = form.find("input[name=password]").val();
+        let konfirmasi_password = form.find("input[name=konfirmasi_password]").val();
+
+        if (username.indexOf(' ') !== -1) {
+            invalidMessage(form.find("input[name=username]"), 'Username tidak boleh mengandung spasi');
+            return false;
+        }
+        if (password.indexOf(' ') !== -1) {
+            invalidMessage(form.find("input[name=password]"), 'Password tidak boleh mengandung spasi');
+            return false;
+        }
+        if(password.length < 8){
+            invalidMessage(form.find("input[name=password]"), 'Password minimal 8 karakter');
+            return false;
+        }
+        if(password != konfirmasi_password){
+            invalidMessage(form.find("input[name=konfirmasi_password]"), 'Konfirmasi password tidak sesuai');
+            return false;
+        }
+
         Swal.fire({
             title: 'Apakah anda yakin ?',
             text: "Simpan data",
@@ -75,46 +97,28 @@ $("#btn-save").click(function (e) {
             cancelButtonText: 'Batal',
         }).then((result) => {
             if (result.value) {
-                $(".loading-container").fadeIn(100);
-                let form = $('#modal-tambah');
-                let nama_lengkap = form.find("input[name=nama_lengkap]").val();
-                let gelar = form.find("input[name=gelar]").val();
-                let nip = form.find("input[name=nip]").val();
-                let nuptk = form.find("input[name=nuptk]").val();
-                let jenis_kelamin = form.find("select[name=jenis_kelamin]").val();
-                let tempat_lahir = form.find("input[name=tempat_lahir]").val();
-                let tanggal_lahir = form.find("input[name=tanggal_lahir]").val();
-                let alamat = form.find("textarea[name=alamat]").val();
-
+                $(".loading-container-1").fadeIn(100);
                 $.ajax({
                     type: 'POST',
-                    url: "/guru",
+                    url: "/user",
                     data: {
-                        nama_lengkap: nama_lengkap,
-                        gelar: gelar,
-                        nip: nip,
-                        nuptk: nuptk,
-                        jenis_kelamin: jenis_kelamin,
-                        tempat_lahir: tempat_lahir,
-                        tanggal_lahir: tanggal_lahir,
-                        alamat: alamat
+                        nama: nama,
+                        username: username,
+                        password: password
                     },
                     dataType: 'json',
                     success: function (data, jqXHR) {
-                        $(".loading-container").fadeOut(100);
+                        $(".loading-container-1").fadeOut(100);
                         if (data.status == 'success') {
                             sweetAlert("", data.message, "success")
-                            $('#modal-tambah').modal('hide');
-                            $('#btn-save').prop('disabled', false);
+                            $('#modalAddData').modal('hide');
                             table.ajax.reload();
                         } else {
                             sweetAlert("", data.message, "error")
-                            $('#btn-save').prop('disabled', false);
                         }
                     },
                     error: function (data, jqXHR) {
-                        $(".loading-container").fadeOut(100);
-                        $('#btn-save').prop('disabled', false);
+                        $(".loading-container-1").fadeOut(100);
                         sweetAlert("", data.responseJSON.message, "error")
                     }
                 });
@@ -123,47 +127,61 @@ $("#btn-save").click(function (e) {
     }
 });
 
-$('#modal-tambah').on('hidden.bs.modal', function () {
-    resetForm('modal-tambah');
-});
-
 // EDIT DATA
 $(document).on('click', '.btn-edit', function (e) {
     e.preventDefault();
     let dataID = $(this).data('id');
-    $(".loading-container").fadeIn(100);
+    $(".loading-container-1").fadeIn(100);
     $.ajax({
         type: 'GET',
-        url: "/guru/" + dataID,
+        url: "/user/" + dataID,
         dataType: 'json',
         success: function (data, jqXHR) {
-            let form = $('#modal-edit');
-            form.find("input[name=guru_id]").val(data.guru_id);
-            form.find("input[name=nama_lengkap]").val(data.nama_lengkap);
-            form.find("input[name=gelar]").val(data.gelar);
-            form.find("input[name=nip]").val(data.nip);
-            form.find("input[name=nuptk]").val(data.nuptk);
-            form.find("select[name=jenis_kelamin]").val(data.jenis_kelamin).trigger("change");
-            form.find("input[name=tempat_lahir]").val(data.tempat_lahir);
-            form.find("input[name=tanggal_lahir]").val(data.tanggal_lahir);
-            form.find("textarea[name=alamat]").val(data.alamat);
-            $(".loading-container").fadeOut(100);
+            console.log(data);
+            let form = $('#form-edit');
+            form.find("input[name=user_id]").val(data.user_id);
+            form.find("input[name=nama]").val(data.nama);
+            form.find("input[name=username]").val(data.username);
+            form.find("select[name=status]").val(data.status).trigger("change");
+            $(".loading-container-1").fadeOut(100);
         },
         error: function (data, jqXHR) {
-            $(".loading-container").fadeOut(100);
+            $(".loading-container-1").fadeOut(100);
             alert(jqXHR.status);
         }
     });
 });
 
-$('#modal-edit').on('hidden.bs.modal', function () {
-    resetForm('modal-edit');
-});
 
 $("#btn-update").click(function (e) {
     e.preventDefault();
-    let isValid = checkValidateForm('modal-edit');
+    let isValid = checkValidateForm('form-edit');
     if (isValid == true) {
+        let form = $('#form-edit');
+        let user_id = form.find("input[name=user_id]").val();
+        let nama = form.find("input[name=nama]").val();
+        let username = form.find("input[name=username]").val();
+        let status = form.find("select[name=status]").val();
+        let password = form.find("input[name=password]").val();
+        let konfirmasi_password = form.find("input[name=konfirmasi_password]").val();
+
+        if (username.indexOf(' ') !== -1) {
+            invalidMessage(form.find("input[name=username]"), 'Username tidak boleh mengandung spasi');
+            return false;
+        }
+        if (password != '' && password.indexOf(' ') !== -1) {
+            invalidMessage(form.find("input[name=password]"), 'Password tidak boleh mengandung spasi');
+            return false;
+        }
+        if(password != '' && password.length < 8){
+            invalidMessage(form.find("input[name=password]"), 'Password minimal 8 karakter');
+            return false;
+        }
+        if(password != '' && password != konfirmasi_password){
+            invalidMessage(form.find("input[name=konfirmasi_password]"), 'Konfirmasi password tidak sesuai');
+            return false;
+        }
+
         Swal.fire({
             title: 'Apakah anda yakin ?',
             text: "Simpan perubahan data",
@@ -175,44 +193,29 @@ $("#btn-update").click(function (e) {
             cancelButtonText: 'Batal',
         }).then((result) => {
             if (result.value) {
-                $(".loading-container").fadeIn(100);
-                let form = $('#modal-edit');
-                let guru_id = form.find("input[name=guru_id]").val();
-                let nama_lengkap = form.find("input[name=nama_lengkap]").val();
-                let gelar = form.find("input[name=gelar]").val();
-                let nip = form.find("input[name=nip]").val();
-                let nuptk = form.find("input[name=nuptk]").val();
-                let jenis_kelamin = form.find("select[name=jenis_kelamin]").val();
-                let tempat_lahir = form.find("input[name=tempat_lahir]").val();
-                let tanggal_lahir = form.find("input[name=tanggal_lahir]").val();
-                let alamat = form.find("textarea[name=alamat]").val();
-
+                $(".loading-container-1").fadeIn(100);
                 $.ajax({
                     type: 'PUT',
-                    url: "/guru/" + guru_id,
+                    url: "/user/" + user_id,
                     data: {
-                        nama_lengkap: nama_lengkap,
-                        gelar: gelar,
-                        nip: nip,
-                        nuptk: nuptk,
-                        jenis_kelamin: jenis_kelamin,
-                        tempat_lahir: tempat_lahir,
-                        tanggal_lahir: tanggal_lahir,
-                        alamat: alamat
+                        nama: nama,
+                        username: username,
+                        status: status,
+                        password: password
                     },
                     dataType: 'json',
                     success: function (data, jqXHR) {
-                        $(".loading-container").fadeOut(100);
+                        $(".loading-container-1").fadeOut(100);
                         if (data.status == 'success') {
                             sweetAlert("", data.message, "success");
-                            $('#modal-edit').modal('hide');
+                            $('#modalEditData').modal('hide');
                             table.ajax.reload();
                         } else {
                             sweetAlert("", data.message, "error");
                         }
                     },
                     error: function (data, jqXHR) {
-                        $(".loading-container").fadeOut(100);
+                        $(".loading-container-1").fadeOut(100);
                         sweetAlert("", data.responseJSON.message, "error")
                     }
                 });
@@ -236,13 +239,13 @@ $(document).on('click', '.btn-delete', function (e) {
         cancelButtonText: 'Batal',
     }).then((result) => {
         if (result.value) {
-            $(".loading-container").fadeIn(100);
+            $(".loading-container-1").fadeIn(100);
             $.ajax({
                 type: 'DELETE',
-                url: "/guru/" + dataID,
+                url: "/user/" + dataID,
                 dataType: 'json',
                 success: function (data, jqXHR) {
-                    $(".loading-container").fadeOut(100);
+                    $(".loading-container-1").fadeOut(100);
                     if (data.status == 'success') {
                         sweetAlert("", data.message, "success")
                         table.ajax.reload();

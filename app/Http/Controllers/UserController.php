@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\User;
 use Illuminate\Http\Request;
 use DataTables;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
 {
@@ -18,7 +20,7 @@ class UserController extends Controller
         $title = 'User';
         $pagejs = 'user.js';
         if ($request->ajax()) {
-            $data_user = User::where('is_delete', false)->get();
+            $data_user = User::where('id', '!=', Auth::user()->id)->where('is_delete', false)->get();
             // FILTER
             $filter_record = (isset($request->filter_record)) ? $request->filter_record : '';
             $params_array = [];
@@ -48,13 +50,10 @@ class UserController extends Controller
                 })
                 ->addColumn('action', function ($user) {
                     $actionButtons = '<div class="form-button-action">
-                                        <button type="button" data-toggle="tooltip" title="" class="btn btn-action btn-sm btn-success" data-original-title="View">
-                                            <i class="fa fa-eye"></i>
-                                        </button>
-                                        <button type="button" data-toggle="tooltip" title="" class="btn btn-action btn-sm btn-primary ml-1" data-original-title="Edit">
+                                        <button data-id="' . $user->id . ' title="Edit" class="btn btn-edit btn-action btn-sm btn-primary ml-1" data-toggle="modal" data-target="#modalEditData">
                                             <i class="fa fa-pen"></i>
                                         </button>
-                                        <button type="button" data-toggle="tooltip" title="" class="btn btn-action btn-sm btn-danger ml-1" data-original-title="Delete">
+                                        <button type="button" data-id="' . $user->id . ' title="Hapus" class="btn btn-delete btn-action btn-sm btn-danger ml-1">
                                             <i class="fa fa-trash"></i>
                                         </button>
                                     </div>';
@@ -66,16 +65,6 @@ class UserController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -83,7 +72,33 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validator = Validator::make($request->all(), [
+            'nama' => 'max:100',
+            'username' => 'max:100|unique:user',
+        ]);
+
+        if ($validator->fails()) {
+            $response = [
+                'status'  => 'error',
+                'message' => $validator->messages()->all()[0]
+            ];
+            return response()->json($response, 200);
+        }
+
+        $user = new User();
+        $user->nama = $request->nama;
+        $user->username = strtolower($request->username);
+        $user->password = bcrypt($request->password);
+        $user->role = 1;
+        $user->status = true;
+        $user->avatar = 'default.png';
+        $user->save();
+
+        $response = [
+            'status'  => 'success',
+            'message' => 'Data berhasil disimpan'
+        ];
+        return response()->json($response, 200);
     }
 
     /**
@@ -94,18 +109,15 @@ class UserController extends Controller
      */
     public function show($id)
     {
-        //
-    }
+        $user = User::findorfail($id);
+        $response = [
+            'user_id'  => $user->id,
+            'nama' => $user->nama,
+            'username' => $user->username,
+            'status' => $user->status
+        ];
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
+        return response()->json($response, 200);
     }
 
     /**
@@ -117,7 +129,29 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $checkUsername = User::where('username', strtolower($request->username))->where('id', '!=', $id)->first();
+        if (!is_null($checkUsername)) {
+            $response = [
+                'status'  => 'error',
+                'message' => 'username ' . $request->username . ' telah digunakan'
+            ];
+            return response()->json($response, 200);
+        }
+
+        $user = User::findorfail($id);
+        $user->nama = $request->nama;
+        $user->username = strtolower($request->username);
+        $user->status = $request->status;
+        if ($request->password != '') {
+            $user->password = bcrypt($request->password);
+        }
+        $user->save();
+
+        $response = [
+            'status'  => 'success',
+            'message' => 'Data berhasil disimpan'
+        ];
+        return response()->json($response, 200);
     }
 
     /**
@@ -128,6 +162,14 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $user = User::findorfail($id);
+        $user->is_delete = true;
+        $user->save();
+
+        $response = [
+            'status'  => 'success',
+            'message' => 'Data berhasil dihapus'
+        ];
+        return response()->json($response, 200);
     }
 }

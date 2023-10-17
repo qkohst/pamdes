@@ -3,8 +3,9 @@
 
 <head>
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <title>Pamdes - Dashboard</title>
+    <title>Pamdes | {{$title}}</title>
     <meta content='width=device-width, initial-scale=1.0, shrink-to-fit=no' name='viewport' />
+    <meta name="csrf-token" content="{{ csrf_token() }}" />
     <link rel="icon" href="../assets/img/icon.ico" type="image/x-icon" />
     <link rel="stylesheet" href="../assets/auth/css/my-style.css">
     <!-- Fonts and icons -->
@@ -32,6 +33,8 @@
     <!-- Select2 -->
     <link rel="stylesheet" href="/assets/plugins/select2/css/select2.min.css">
     <link rel="stylesheet" href="/assets/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
+
+    <link href="../assets/auth/plugins/sweetalert2/dist/sweetalert2.min.css" rel="stylesheet">
 
     <!-- CSS Just for demo purpose, don't include it in your project -->
     <!-- <link rel="stylesheet" href="../assets/css/demo.css"> -->
