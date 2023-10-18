@@ -41,6 +41,9 @@ Route::group(['middleware' => ['auth']], function () {
     Route::resource('/user', 'UserController',  [
         'uses' => ['index', 'store', 'show', 'update', 'destroy']
     ]);
+    Route::get('/pelanggan/export', 'PelangganController@export');
+    Route::get('/pelanggan/import', 'PelangganController@download_format_import');
+    Route::post('/pelanggan/import', 'PelangganController@import');
     Route::resource('/pelanggan', 'PelangganController',  [
         'uses' => ['index', 'store', 'show', 'update', 'destroy']
     ]);

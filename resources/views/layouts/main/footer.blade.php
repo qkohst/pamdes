@@ -1,7 +1,7 @@
 <footer class="footer">
     <div class="container-fluid">
         <div class="copyright ml-auto">
-            2023, Developed by <a href="#">Qkoh St</a>
+            Pamdes V.10 | Developed by <a href="#">Qkoh St</a> | 2023
         </div>
     </div>
 </footer>
@@ -65,6 +65,8 @@
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
     });
+
+    var baseUrl = "{{ url('/') }}";
 
 
     $(document).ready(function() {

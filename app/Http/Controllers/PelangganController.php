@@ -2,9 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\PelangganExport;
+use App\Imports\PelangganImport;
 use App\Pelanggan;
 use Illuminate\Http\Request;
 use DataTables;
+use Excel;
+use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\Storage;
 
 class PelangganController extends Controller
 {
@@ -40,6 +45,8 @@ class PelangganController extends Controller
                     }
                 }
             }
+
+            // BERIKAN PENGECEKAN KETIKA SUDAH DIPAKAI TRANSAKSI TIDAK BISA DIHAPUS
 
             // RETURN DATA
             return DataTables::of($data_pelanggan)
@@ -159,5 +166,102 @@ class PelangganController extends Controller
             'message' => 'Data berhasil dihapus'
         ];
         return response()->json($response, 200);
+    }
+
+    public function download_format_import()
+    {
+        $file = public_path() . "/format_import_excel/format_import_pelanggan.xls";
+        $headers = array(
+            'Content-Type: application/xls',
+        );
+        return Response::download($file, 'format_import_pelanggan ' . date('Y-m-d H_i_s') . '.xls', $headers);
+    }
+
+    public function import(Request $request)
+    {
+        // dd($request->file('file_import'));
+
+        // get array data
+        $file = $request->file('file_import');
+        $filePath = $file->store('temp');
+        $import = new PelangganImport();
+        Excel::import($import, $filePath);
+        Storage::delete($filePath);
+        $importedData = $import->getData();
+        // dd($importedData);
+        if (count($importedData) == 0) {
+            $response = [
+                'status'  => 'error',
+                'message' => 'Data pada file import tidak ditemukan, silahkan perbaiki data anda dan import ulang'
+            ];
+            return response()->json($response, 200);
+        }
+
+        // cek apakah data sudah ada 
+        foreach ($importedData as $data) {
+            $is_duplicate_kode = Pelanggan::where('kode', $data['kode_pelanggan'])
+                ->where('is_delete', false)->first();
+            if (!is_null($is_duplicate_kode)) {
+                $response = [
+                    'status'  => 'error',
+                    'message' => 'Kode pelanggan ' . $data['kode_pelanggan'] . ' telah terdata di sistem, silahkan perbaiki data anda dan import ulang'
+                ];
+                return response()->json($response, 200);
+            }
+
+            $is_duplicate_data = Pelanggan::where('nama_lengkap', $data['nama_lengkap'])
+                ->where('nomor_hp_wa', $data['nomor_hp_wa'])
+                ->where('is_delete', false)->first();
+            if (!is_null($is_duplicate_data)) {
+                $response = [
+                    'status'  => 'error',
+                    'message' => 'Pelanggan ' . $data['nama_lengkap'] . ' telah terdata di sistem, silahkan perbaiki data anda dan import ulang'
+                ];
+                return response()->json($response, 200);
+            }
+
+            if ($data['nama_lengkap'] == '' || $data['nama_lengkap'] == null) {
+                $response = [
+                    'status'  => 'error',
+                    'message' => 'Kolom nama lengkap tidak boleh kosong, silahkan perbaiki data anda dan import ulang'
+                ];
+                return response()->json($response, 200);
+            }
+
+            if ($data['alamat'] == '' || $data['alamat'] == null) {
+                $response = [
+                    'status'  => 'error',
+                    'message' => 'Kolom alamat tidak boleh kosong, silahkan perbaiki data anda dan import ulang'
+                ];
+                return response()->json($response, 200);
+            }
+        }
+
+        // loop save data
+        foreach ($importedData as $data) {
+            $kode_pelanggan = $data['kode_pelanggan'];
+            if ($kode_pelanggan == '' || $kode_pelanggan == null) {
+                $kode_pelanggan = Pelanggan::getKodePelanggan();
+            }
+
+            $pelanggan = new Pelanggan();
+            $pelanggan->kode = $kode_pelanggan;
+            $pelanggan->nama_lengkap = $data['nama_lengkap'];
+            $pelanggan->nomor_hp_wa = $data['nomor_hp_wa'];
+            $pelanggan->alamat = $data['alamat'];
+            $pelanggan->save();
+        }
+        $response = [
+            'status'  => 'success',
+            'message' => 'Data berhasil disimpan'
+        ];
+        return response()->json($response, 200);
+    }
+
+    public function export(Request $request)
+    {
+        $filter_data = $request->all();
+        $filename = 'data_pelanggan ' . date('Y-m-d H_i_s') . '.xls';
+        return Excel::download(new PelangganExport($filter_data), $filename);
     }
 }

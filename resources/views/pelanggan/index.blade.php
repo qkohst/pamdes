@@ -48,12 +48,22 @@
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header">
-                        <div class="d-flex align-items-center">
-                            <h4 class="card-title">Data {{$title}}</h4>
-                            <button class="btn btn-primary btn-round btn-sm ml-auto" data-toggle="modal" data-target="#modalAddData">
-                                <i class="fa fa-plus mr-1"></i>
-                                TAMBAH
-                            </button>
+                        <div class="card-head-row">
+                            <div class="card-title">Data {{$title}}</div>
+                            <div class="card-tools">
+                                <button class="btn btn-info btn-border btn-round btn-sm mr-1" id="btn-export-excel">
+                                    <i class="fa fa-file-download mr-1"></i>
+                                    EXPORT EXCEL
+                                </button>
+                                <button class="btn btn-info btn-border btn-round btn-sm mr-1" data-toggle="modal" data-target="#modalImportData">
+                                    <i class="fa fa-upload mr-1"></i>
+                                    IMPORT
+                                </button>
+                                <button class="btn btn-primary btn-round btn-sm" data-toggle="modal" data-target="#modalAddData">
+                                    <i class="fa fa-plus mr-1"></i>
+                                    TAMBAH
+                                </button>
+                            </div>
                         </div>
                     </div>
                     <div class="card-body">
@@ -192,4 +202,43 @@
     </div>
 </div>
 <!-- End Modal Edit -->
+
+<!-- Modal Import -->
+<div class="modal fade" id="modalImportData" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    Import {{$title}}
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body py-0">
+                <form id="form-import">
+                    <div class="alert alert-primary mt-3" role="alert">
+                        <h5>Download format import</h5>
+                        <p>Silahkan download file format import melalui tombol dibawah ini.</p>
+                        <button class="btn btn-sm btn-primary text-white" name="btn-dowload-format" id="btn-dowload-format"><i class="fas fa-file-download mr-1"></i> Download</button>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="file_import">File Import</label>
+                                <input type="file" class="form-control no-spasi uppercase required" id="file_import" name="file_import" accept=".xlsx, .xls">
+                            </div>
+                        </div>
+                    </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">BATAL</button>
+                <button type="button" id="btn-upload" class="btn btn-primary btn-sm">UPLOAD</button>
+            </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- End Modal Import -->
+
 @include('layouts.main.footer')

@@ -278,3 +278,72 @@ $(document).on('click', '.btn-delete', function (e) {
         }
     })
 });
+
+// DOWNLOAD FROMAT IMPORT
+$("#btn-dowload-format").click(function (e) {
+    e.preventDefault();
+    window.open(baseUrl+'/pelanggan/import', '_blank');
+});
+
+// UPLOAD DATA
+$("#btn-upload").click(function (e) {
+    e.preventDefault();
+    let isValid = checkValidateForm('form-import');
+    if (isValid == true) {
+        let file_import = $("[name=file_import]")[0].files[0];
+        let payload_data = new FormData();
+        payload_data.append('file_import', file_import);
+
+        Swal.fire({
+            title: 'Apakah anda yakin ?',
+            text: "Import data",
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'OK',
+            cancelButtonText: 'Batal',
+        }).then((result) => {
+            if (result.value) {
+                $(".loading-container-1").fadeIn(100);
+                $.ajax({
+                    type: 'POST',
+                    url: "/pelanggan/import",
+                    data: payload_data,
+                    processData: false,
+                    contentType: false,
+                    dataType: 'json',
+                    success: function (data, jqXHR) {
+                        $(".loading-container-1").fadeOut(100);
+                        if (data.status == 'success') {
+                            sweetAlert("", data.message, "success");
+                            $('#modalImportData').modal('hide');
+                            table.ajax.reload();
+                        } else {
+                            sweetAlert("", data.message, "error");
+                            $('#modalImportData').modal('hide');
+                        }
+                    },
+                    error: function (data, jqXHR) {
+                        $(".loading-container-1").fadeOut(100);
+                        $('#modalImportData').modal('hide');
+                        sweetAlert("", data.responseJSON.message, "error")
+                    }
+                });
+            }
+        })
+    }
+});
+
+// HAPUS FILE YANG DIPILIH KETIKA POP UP DITUTUP
+$('#modalImportData').on('hidden.bs.modal', function() {
+    $('#file_import').val('');
+});
+
+// EXPORT EXCEL
+$("#btn-export-excel").click(function (e) {
+    e.preventDefault();
+    params = $('#form-filter').serialize();
+    console.log(filter_status);
+    window.open(baseUrl+'/pelanggan/export?'+params, '_blank');
+});
