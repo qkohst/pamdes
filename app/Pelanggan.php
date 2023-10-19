@@ -16,6 +16,11 @@ class Pelanggan extends Model
         'is_delete'
     ];
 
+    public function transaksi()
+    {
+        return $this->hasMany('App\Transaksi');
+    }
+
     public function getStatusPelangganAttribute()
     {
         if ($this->status == 1) {

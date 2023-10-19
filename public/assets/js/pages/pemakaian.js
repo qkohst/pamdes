@@ -6,7 +6,7 @@ $(document).ready(function () {
         processing: true,
         serverSide: true,
         ajax: {
-            url: "/pelanggan",
+            url: "/pemakaian",
             data: function (d) {
                 d.filter_record = params;
             }
@@ -20,20 +20,16 @@ $(document).ready(function () {
                 name: "kode"
             },
             {
-                data: "nama_lengkap",
-                name: "nama_lengkap"
+                data: "bulan_tahun_indo",
+                name: "bulan_tahun_indo"
             },
             {
-                data: "nomor_hp_wa",
-                name: "nomor_hp_wa"
+                data: "nama_pelanggan",
+                name: "nama_pelanggan"
             },
             {
-                data: "alamat",
-                name: "alamat"
-            },
-            {
-                data: "status_pelanggan",
-                name: "status_pelanggan"
+                data: "total_pemakaian",
+                name: "total_pemakaian"
             },
         ],
         columnDefs: [{
@@ -42,7 +38,7 @@ $(document).ready(function () {
             className: 'w-col-action'
         }],
         order: [
-            [1, 'asc']
+            [1, 'desc']
         ],
         fixedColumns: {
             left: 1
@@ -66,17 +62,30 @@ $("#btn-reset").click(function (e) {
     table.ajax.reload();
 });
 
-$('#kode_pelanggan').focus(function(){
-    if($(this).val() == '<AUTO GENERATE>'){
-        $(this).val('');
-    }
+// GET TRANSAKSI TERAKHIR
+$(document).on('change', '[name="pelanggan"]', function(e) {
+    e.preventDefault();
+    let pelanggan_id = $(this).val();
+    $(".loading-container-1").fadeIn(100);
+    $.ajax({
+        type: 'GET',
+        url: "/pemakaian/transaksi",
+        data:{
+            pelanggan_id: pelanggan_id
+        },
+        dataType: 'json',
+        success: function (data, jqXHR) {
+            console.log(data);
+            let form = $('#form-add');
+            form.find("input[name=pemakaian_sebelumnya]").autoNumeric('set', data.pemakaian_terakhir);
+            $(".loading-container-1").fadeOut(100);
+        },
+        error: function (data, jqXHR) {
+            $(".loading-container-1").fadeOut(100);
+            alert(jqXHR.status);
+        }
+    });
 });
-
-$('#kode_pelanggan').focusout(function(){
-    if($(this).val() == ''){
-        $(this).val('<AUTO GENERATE>');
-    }
-})
 
 // SAVE DATA
 $("#btn-save").click(function (e) {
@@ -84,25 +93,18 @@ $("#btn-save").click(function (e) {
     let isValid = checkValidateForm('form-add');
     if (isValid == true) {
         let form = $('#form-add');
-        let kode_pelanggan = form.find("input[name=kode_pelanggan]").val();
-        let nama_lengkap = form.find("input[name=nama_lengkap]").val();
-        let nomor_hp_wa = form.find("input[name=nomor_hp_wa]").val();
-        let alamat = form.find("textarea[name=alamat]").val();
+        let bulan_tahun = form.find("select[name=bulan_tahun]").val();        
+        let pelanggan_id = form.find("select[name=pelanggan]").val();        
+        let pemakaian_sebelumnya = form.find("input[name=pemakaian_sebelumnya]").autoNumeric('get');
+        let pemakaian_saat_ini = form.find("input[name=pemakaian_saat_ini]").autoNumeric('get');
 
-        if(kode_pelanggan != '<AUTO GENERATE>' && kode_pelanggan.length > 7){
-            invalidMessage(form.find("input[name=kode_pelanggan]"), 'Kode pelanggan maximal 7 karakter');
+        if(pemakaian_saat_ini == 0){
+            invalidMessage(form.find("input[name=pemakaian_saat_ini]"), 'Pemakaian saat ini tidak boleh 0');
             return false;
         }
-        if(nama_lengkap.length > 100){
-            invalidMessage(form.find("input[name=nama_lengkap]"), 'Nama lengkap maximal 100 karakter');
-            return false;
-        }
-        if(nomor_hp_wa.length > 13){
-            invalidMessage(form.find("input[name=nomor_hp_wa]"), 'Nomor hp wa maximal 13 karakter');
-            return false;
-        }
-        if(alamat.length > 255){
-            invalidMessage(form.find("textarea[name=alamat]"), 'Alamat maximal 255 karakter');
+
+        if(pemakaian_saat_ini <= pemakaian_sebelumnya){
+            invalidMessage(form.find("input[name=pemakaian_saat_ini]"), 'Pemakaian saat ini harus lebih besar dari pemakaian sebelumnya');
             return false;
         }
 
@@ -120,12 +122,12 @@ $("#btn-save").click(function (e) {
                 $(".loading-container-1").fadeIn(100);
                 $.ajax({
                     type: 'POST',
-                    url: "/pelanggan",
+                    url: "/pemakaian",
                     data: {
-                        kode_pelanggan: kode_pelanggan,
-                        nama_lengkap: nama_lengkap,
-                        nomor_hp_wa: nomor_hp_wa,
-                        alamat: alamat,
+                        bulan_tahun: bulan_tahun,
+                        pelanggan_id: pelanggan_id,
+                        pemakaian_sebelumnya: pemakaian_sebelumnya,
+                        pemakaian_saat_ini: pemakaian_saat_ini,
                     },
                     dataType: 'json',
                     success: function (data, jqXHR) {
@@ -155,17 +157,17 @@ $(document).on('click', '.btn-edit', function (e) {
     $(".loading-container-1").fadeIn(100);
     $.ajax({
         type: 'GET',
-        url: "/pelanggan/" + dataID,
+        url: "/pemakaian/" + dataID,
         dataType: 'json',
         success: function (data, jqXHR) {
             console.log(data);
             let form = $('#form-edit');
-            form.find("input[name=pelanggan_id]").val(data.pelanggan_id);
-            form.find("input[name=kode_pelanggan]").val(data.kode_pelanggan);
-            form.find("input[name=nama_lengkap]").val(data.nama_lengkap);
-            form.find("input[name=nomor_hp_wa]").val(data.nomor_hp_wa);
-            form.find("textarea[name=alamat]").val(data.alamat);
-            form.find("select[name=status]").val(data.status).trigger("change");
+            form.find("input[name=transaksi_id]").val(data.transaksi_id);
+            form.find("input[name=kode_transaksi]").val(data.kode_transaksi);
+            form.find("input[name=bulan_tahun]").val(data.bulan_tahun);
+            form.find("input[name=pelanggan]").val(data.pelanggan);
+            form.find("input[name=pemakaian_sebelumnya]").autoNumeric('set', data.pemakaian_sebelumnya);
+            form.find("input[name=pemakaian_saat_ini]").autoNumeric('set', data.pemakaian_saat_ini);
             $(".loading-container-1").fadeOut(100);
         },
         error: function (data, jqXHR) {
@@ -175,28 +177,22 @@ $(document).on('click', '.btn-edit', function (e) {
     });
 });
 
-
 $("#btn-update").click(function (e) {
     e.preventDefault();
     let isValid = checkValidateForm('form-edit');
     if (isValid == true) {
         let form = $('#form-edit');
-        let pelanggan_id = form.find("input[name=pelanggan_id]").val();
-        let nama_lengkap = form.find("input[name=nama_lengkap]").val();
-        let nomor_hp_wa = form.find("input[name=nomor_hp_wa]").val();
-        let alamat = form.find("textarea[name=alamat]").val();
-        let status = form.find("select[name=status]").val();
+        let transaksi_id = form.find("input[name=transaksi_id]").val();
+        let pemakaian_sebelumnya = form.find("input[name=pemakaian_sebelumnya]").autoNumeric('get');
+        let pemakaian_saat_ini = form.find("input[name=pemakaian_saat_ini]").autoNumeric('get');
 
-        if(nama_lengkap.length > 100){
-            invalidMessage(form.find("input[name=nama_lengkap]"), 'Nama lengkap maximal 100 karakter');
+        if(pemakaian_saat_ini == 0){
+            invalidMessage(form.find("input[name=pemakaian_saat_ini]"), 'Pemakaian saat ini tidak boleh 0');
             return false;
         }
-        if(nomor_hp_wa.length > 13){
-            invalidMessage(form.find("input[name=nomor_hp_wa]"), 'Nomor hp wa maximal 13 karakter');
-            return false;
-        }
-        if(alamat.length > 255){
-            invalidMessage(form.find("textarea[name=alamat]"), 'Alamat maximal 255 karakter');
+
+        if(pemakaian_saat_ini <= pemakaian_sebelumnya){
+            invalidMessage(form.find("input[name=pemakaian_saat_ini]"), 'Pemakaian saat ini harus lebih besar dari pemakaian sebelumnya');
             return false;
         }
 
@@ -214,12 +210,9 @@ $("#btn-update").click(function (e) {
                 $(".loading-container-1").fadeIn(100);
                 $.ajax({
                     type: 'PUT',
-                    url: "/pelanggan/" + pelanggan_id,
+                    url: "/pemakaian/" + transaksi_id,
                     data: {
-                        nama_lengkap: nama_lengkap,
-                        nomor_hp_wa: nomor_hp_wa,
-                        alamat: alamat,
-                        status: status,
+                        pemakaian_saat_ini: pemakaian_saat_ini
                     },
                     dataType: 'json',
                     success: function (data, jqXHR) {
@@ -260,7 +253,7 @@ $(document).on('click', '.btn-delete', function (e) {
             $(".loading-container-1").fadeIn(100);
             $.ajax({
                 type: 'DELETE',
-                url: "/pelanggan/" + dataID,
+                url: "/pemakaian/" + dataID,
                 dataType: 'json',
                 success: function (data, jqXHR) {
                     $(".loading-container-1").fadeOut(100);
@@ -277,73 +270,4 @@ $(document).on('click', '.btn-delete', function (e) {
             });
         }
     })
-});
-
-// DOWNLOAD FROMAT IMPORT
-$("#btn-dowload-format").click(function (e) {
-    e.preventDefault();
-    window.open(baseUrl+'/pelanggan/import', '_blank');
-});
-
-// UPLOAD DATA
-$("#btn-upload").click(function (e) {
-    e.preventDefault();
-    let isValid = checkValidateForm('form-import');
-    if (isValid == true) {
-        let file_import = $("[name=file_import]")[0].files[0];
-        let payload_data = new FormData();
-        payload_data.append('file_import', file_import);
-
-        Swal.fire({
-            title: 'Apakah anda yakin ?',
-            text: "Import data",
-            type: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'OK',
-            cancelButtonText: 'Batal',
-        }).then((result) => {
-            if (result.value) {
-                $(".loading-container-1").fadeIn(100);
-                $.ajax({
-                    type: 'POST',
-                    url: "/pelanggan/import",
-                    data: payload_data,
-                    processData: false,
-                    contentType: false,
-                    dataType: 'json',
-                    success: function (data, jqXHR) {
-                        $(".loading-container-1").fadeOut(100);
-                        if (data.status == 'success') {
-                            sweetAlert("", data.message, "success");
-                            $('#modalImportData').modal('hide');
-                            table.ajax.reload();
-                        } else {
-                            sweetAlert("", data.message, "error");
-                            $('#modalImportData').modal('hide');
-                        }
-                    },
-                    error: function (data, jqXHR) {
-                        $(".loading-container-1").fadeOut(100);
-                        $('#modalImportData').modal('hide');
-                        sweetAlert("", data.responseJSON.message, "error")
-                    }
-                });
-            }
-        })
-    }
-});
-
-// HAPUS FILE YANG DIPILIH KETIKA POP UP DITUTUP
-$('#modalImportData').on('hidden.bs.modal', function() {
-    $('#file_import').val('');
-});
-
-// EXPORT EXCEL
-$("#btn-export-excel").click(function (e) {
-    e.preventDefault();
-    params = $('#form-filter').serialize();
-    console.log(filter_status);
-    window.open(baseUrl+'/pelanggan/export?'+params, '_blank');
 });

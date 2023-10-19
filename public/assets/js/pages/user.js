@@ -39,7 +39,7 @@ $(document).ready(function () {
         fixedColumns: {
             left: 1
         },
-        scrollX: true,
+        // scrollX: true,
         deferRender: true
     });
 });

@@ -50,4 +50,11 @@ Route::group(['middleware' => ['auth']], function () {
     Route::resource('/tarif-air', 'TarifAirController',  [
         'uses' => ['index', 'store']
     ]);
+
+    Route::get('/pemakaian/import', 'PemakaianController@download_format_import');
+    Route::post('/pemakaian/import', 'PemakaianController@import');
+    Route::get('/pemakaian/transaksi', 'PemakaianController@get_transaksi_terakhir');
+    Route::resource('/pemakaian', 'PemakaianController',  [
+        'uses' => ['index', 'store', 'show', 'update', 'destroy']
+    ]);
 });

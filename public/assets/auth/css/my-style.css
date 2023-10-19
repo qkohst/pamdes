@@ -192,9 +192,9 @@
     height: 45px !important;
 }
 
-#table-data thead {
+/* #table-data thead {
     display: none;
-}
+} */
 
 /* login logo */
 .login-logo {

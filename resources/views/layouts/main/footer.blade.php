@@ -77,11 +77,11 @@
         setAutonumeric();
     });
 
-    $(".btn-toggle").click(function() {
-        $('#table-data').find('thead').addClass('d-none');
-        params = $('#form-filter').serialize();
-        table.ajax.reload();
-    });
+    // $(".btn-toggle").click(function() {
+    //     $('#table-data').find('thead').addClass('d-none');
+    //     params = $('#form-filter').serialize();
+    //     table.ajax.reload();
+    // });
 
     function setAutonumeric() {
         $('.autonumeric').each(function() {

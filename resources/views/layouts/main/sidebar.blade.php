@@ -81,7 +81,7 @@
                      <div class="collapse" id="sidebarAirku">
                          <ul class="nav nav-collapse">
                              <li class="sub-menu">
-                                 <a href="#">
+                                 <a href="/pemakaian">
                                      <span class="sub-item">Pemakaian</span>
                                  </a>
                              </li>
