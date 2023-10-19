@@ -63,6 +63,11 @@
                                      <span class="sub-item">Pelanggan</span>
                                  </a>
                              </li>
+                             <li class="sub-menu">
+                                 <a href="/tarif-air">
+                                     <span class="sub-item">Tarif Air</span>
+                                 </a>
+                             </li>
                          </ul>
                      </div>
                  </li>
@@ -77,12 +82,12 @@
                          <ul class="nav nav-collapse">
                              <li class="sub-menu">
                                  <a href="#">
-                                     <span class="sub-item">Tarif Air</span>
+                                     <span class="sub-item">Pemakaian</span>
                                  </a>
                              </li>
                              <li class="sub-menu">
                                  <a href="#">
-                                     <span class="sub-item">Pemakaian/Transaksi</span>
+                                     <span class="sub-item">Pembayaran</span>
                                  </a>
                              </li>
                          </ul>

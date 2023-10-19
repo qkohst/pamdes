@@ -47,4 +47,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::resource('/pelanggan', 'PelangganController',  [
         'uses' => ['index', 'store', 'show', 'update', 'destroy']
     ]);
+    Route::resource('/tarif-air', 'TarifAirController',  [
+        'uses' => ['index', 'store']
+    ]);
 });

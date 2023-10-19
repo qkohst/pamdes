@@ -50,6 +50,8 @@
 <script src="../../assets/js/plugin/datatables/datatables.min.js"></script>
 <script src="../../assets/plugins/select2/js/select2.full.min.js"></script>
 
+<script src="../../assets/plugins/autoNumeric/autoNumeric.js"></script>
+
 <!-- Atlantis DEMO methods, don't include it in your project! -->
 <!-- <script src="../assets/js/setting-demo.js"></script>
 <script src="../assets/js/demo.js"></script> -->
@@ -72,6 +74,7 @@
     $(document).ready(function() {
         setActiveSidebar();
         $('.select2').select2();
+        setAutonumeric();
     });
 
     $(".btn-toggle").click(function() {
@@ -79,6 +82,18 @@
         params = $('#form-filter').serialize();
         table.ajax.reload();
     });
+
+    function setAutonumeric() {
+        $('.autonumeric').each(function() {
+            $(this).autoNumeric('init', {
+                mDec: 2,
+                aSep: '.',
+                aDec: ',',
+                vMin: '0'
+                // aPad: false
+            });
+        });
+    }
 
     function setActiveSidebar() {
         var currentURL = window.location.href;
