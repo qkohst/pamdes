@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\OptionPeriodeHelper;
+use App\Imports\TransaksiImport;
 use App\Pelanggan;
 use App\Transaksi;
 use Illuminate\Http\Request;
@@ -188,11 +189,110 @@ class PemakaianController extends Controller
 
     public function download_format_import()
     {
-        // NEXT HERE
+        $file = public_path() . "/format_import_excel/format_import_pemakaian.xls";
+        $headers = array(
+            'Content-Type: application/xls',
+        );
+        return Response::download($file, 'format_import_pemakaian ' . date('Y-m-d H_i_s') . '.xls', $headers);
     }
 
     public function import(Request $request)
     {
-        // NEXT HERE
+        // dd($request->file('file_import'));
+        // get array data
+        $file = $request->file('file_import');
+        $filePath = $file->store('temp');
+        $import = new TransaksiImport();
+        Excel::import($import, $filePath);
+        Storage::delete($filePath);
+        $importedData = $import->getData();
+        // dd($importedData);
+        if (count($importedData) == 0) {
+            $response = [
+                'status'  => 'error',
+                'message' => 'Data pada file import tidak ditemukan, silahkan perbaiki data anda dan import ulang'
+            ];
+            return response()->json($response, 200);
+        }
+
+        // cek validasi data
+        foreach ($importedData as $data) {
+            if (strlen($data['bulan_tahun']) != 7) {
+                $response = [
+                    'status'  => 'error',
+                    'message' => 'Bulan tahun tidak valid, silahkan perbaiki data anda dan import ulang'
+                ];
+                return response()->json($response, 200);
+            }
+
+            $pelanggan = Pelanggan::where('kode', $data['kode_pelanggan'])
+                ->where('is_delete', false)->first();
+            if (is_null($pelanggan)) {
+                $response = [
+                    'status'  => 'error',
+                    'message' => 'Kode pelanggan ' . $data['kode_pelanggan'] . ' tidak ditemukan'
+                ];
+                return response()->json($response, 200);
+            }
+
+            $is_duplicate_data = Transaksi::where('pelanggan_id', $pelanggan->id)
+                ->where('bulan_tahun', $data['bulan_tahun'])
+                ->where('is_delete', false)->first();
+            if (!is_null($is_duplicate_data)) {
+                $response = [
+                    'status'  => 'error',
+                    'message' => 'Transaksi bulan ' . $data['bulan_tahun'] . ' pelanggan ' . $pelanggan->kode . ' telah terdata di sistem, silahkan perbaiki data anda dan import ulang'
+                ];
+                return response()->json($response, 200);
+            }
+
+            if ($data['pemakaian_saat_ini'] == null || $data['pemakaian_saat_ini'] == 0) {
+                $response = [
+                    'status'  => 'error',
+                    'message' => 'Pemakaian bulan ini pelanggan ' . $pelanggan->kode . ' tidak boleh kosong atau 0'
+                ];
+                return response()->json($response, 200);
+            }
+
+            if ($data['pemakaian_sebelumnya'] == null || $data['pemakaian_sebelumnya'] == 0) {
+                $transaksi_terakhir = Transaksi::where("pelanggan_id", $pelanggan->id)->where('is_delete', false)->orderBy('id', 'desc')->first();
+                if (!is_null($transaksi_terakhir) && $data['pemakaian_saat_ini'] <= $transaksi_terakhir->pemakaian_saat_ini) {
+                    $response = [
+                        'status'  => 'error',
+                        'message' => 'Pemakaian bulan ini pelanggan ' . $pelanggan->kode . ' tidak boleh kurang dari pemakaian pada bulan sebelumnya'
+                    ];
+                    return response()->json($response, 200);
+                }
+            }
+        }
+
+        // loop save data
+        foreach ($importedData as $data) {
+            $pelanggan = Pelanggan::where('kode', $data['kode_pelanggan'])
+                ->where('is_delete', false)->first();
+            $kode_transaksi = Transaksi::getKodeTransaksi($data['bulan_tahun']);
+            $pemakaian_sebelumnya = $data['pemakaian_sebelumnya'];
+            if ($pemakaian_sebelumnya == null || $pemakaian_sebelumnya == 0) {
+                $transaksi_terakhir = Transaksi::where("pelanggan_id", $pelanggan->id)->where('is_delete', false)->orderBy('id', 'desc')->first();
+                if (!is_null($transaksi_terakhir)) {
+                    $pemakaian_sebelumnya = $transaksi_terakhir->pemakaian_saat_ini;
+                } else {
+                    $pemakaian_sebelumnya = 0;
+                }
+            }
+
+            $transaksi = new Transaksi();
+            $transaksi->pelanggan_id = $pelanggan->id;
+            $transaksi->kode = $kode_transaksi;
+            $transaksi->bulan_tahun = $data['bulan_tahun'];
+            $transaksi->pemakaian_sebelumnya = $pemakaian_sebelumnya;
+            $transaksi->pemakaian_saat_ini = $data['pemakaian_saat_ini'];
+            $transaksi->save();
+        }
+        $response = [
+            'status'  => 'success',
+            'message' => 'Data berhasil disimpan'
+        ];
+        return response()->json($response, 200);
     }
 }
