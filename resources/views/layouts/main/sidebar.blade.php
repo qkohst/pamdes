@@ -86,7 +86,7 @@
                                  </a>
                              </li>
                              <li class="sub-menu">
-                                 <a href="#">
+                                 <a href="/pembayaran">
                                      <span class="sub-item">Pembayaran</span>
                                  </a>
                              </li>

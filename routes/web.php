@@ -57,4 +57,10 @@ Route::group(['middleware' => ['auth']], function () {
     Route::resource('/pemakaian', 'PemakaianController',  [
         'uses' => ['index', 'store', 'show', 'update', 'destroy']
     ]);
+
+    Route::get('/pembayaran/export', 'PembayaranController@export');
+    Route::get('/pembayaran/transaksi', 'PembayaranController@get_transaksi_belum_bayar');
+    Route::resource('/pembayaran', 'PembayaranController',  [
+        'uses' => ['index', 'store', 'show']
+    ]);
 });

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\NumberFormatHelper;
 use App\Helpers\OptionPeriodeHelper;
 use App\Imports\TransaksiImport;
 use App\Pelanggan;
@@ -57,7 +58,7 @@ class PemakaianController extends Controller
                     return $transaksi->pelanggan->kode . ' | ' . $transaksi->pelanggan->nama_lengkap;
                 })
                 ->addColumn('total_pemakaian', function ($transaksi) {
-                    return ($transaksi->pemakaian_saat_ini - $transaksi->pemakaian_sebelumnya);
+                    return NumberFormatHelper::decimal($transaksi->total_pemakaian);
                 })
                 ->addColumn('action', function ($transaksi) {
                     $actionButtons = '<div class="form-button-action">

@@ -19,6 +19,7 @@ class Transaksi extends Model
         'biaya_administrasi',
         'status',
         'is_delete',
+        'tanggal_pembayaran',
     ];
 
     public function pelanggan()
@@ -29,6 +30,34 @@ class Transaksi extends Model
     public function getBulanTahunIndoAttribute()
     {
         $result = OptionPeriodeHelper::tglIndo($this->bulan_tahun);
+        return $result;
+    }
+
+    public function getTotalTagihanAttribute()
+    {
+        $result = (($this->pemakaian_saat_ini - $this->pemakaian_sebelumnya) * $this->tarif_per_meter) + $this->biaya_pemeliharaan + $this->biaya_administrasi;
+        return $result;
+    }
+
+    public function getTotalPemakaianAttribute()
+    {
+        $result = $this->pemakaian_saat_ini - $this->pemakaian_sebelumnya;
+        return $result;
+    }
+
+    public function getTanggalPembayaranIndoAttribute()
+    {
+        $result = OptionPeriodeHelper::tglIndoFull($this->tanggal_pembayaran);
+        return $result;
+    }
+
+    public function getStatusStrAttribute()
+    {
+        if ($this->status == 1) {
+            $result = 'Lunas';
+        } elseif ($this->status == 0) {
+            $result = 'belum Lunas';
+        }
         return $result;
     }
 

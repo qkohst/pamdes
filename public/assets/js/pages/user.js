@@ -31,6 +31,7 @@ $(document).ready(function () {
         columnDefs: [{
             targets: [0],
             orderable: false,
+            searchable: false,
             className: 'w-col-action'
         }],
         order: [

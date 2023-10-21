@@ -39,6 +39,7 @@ $(document).ready(function () {
         columnDefs: [{
             targets: [0],
             orderable: false,
+            searchable: false,
             className: 'w-col-action'
         }],
         order: [
@@ -344,6 +345,5 @@ $('#modalImportData').on('hidden.bs.modal', function() {
 $("#btn-export-excel").click(function (e) {
     e.preventDefault();
     params = $('#form-filter').serialize();
-    console.log(filter_status);
     window.open(baseUrl+'/pelanggan/export?'+params, '_blank');
 });

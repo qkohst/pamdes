@@ -43,7 +43,8 @@
             "database/factories"
         ],
         "files": [
-            "app/Helpers/OptionPeriodeHelper.php"
+            "app/Helpers/OptionPeriodeHelper.php",
+            "app/Helpers/NumberFormatHelper.php"
         ]
     },
     "autoload-dev": {

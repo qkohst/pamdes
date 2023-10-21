@@ -3,7 +3,6 @@
 namespace App\Exports;
 
 use App\Pelanggan;
-use Maatwebsite\Excel\Concerns\FromCollection;
 use Illuminate\Contracts\View\View;
 use Maatwebsite\Excel\Concerns\FromView;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
@@ -17,9 +16,6 @@ class PelangganExport implements FromView, ShouldAutoSize
         $this->filters = $filters;
     }
 
-    /**
-     * @return \Illuminate\Support\Collection
-     */
     public function  view(): View
     {
         $data_pelanggan = Pelanggan::where('is_delete', false)->get();

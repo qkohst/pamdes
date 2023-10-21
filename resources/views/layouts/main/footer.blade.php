@@ -86,6 +86,16 @@
     function setAutonumeric() {
         $('.autonumeric').each(function() {
             $(this).autoNumeric('init', {
+                mDec: 0,
+                aSep: '.',
+                aDec: ',',
+                vMin: '0'
+                // aPad: false
+            });
+        });
+
+        $('.autonumeric-2').each(function() {
+            $(this).autoNumeric('init', {
                 mDec: 2,
                 aSep: '.',
                 aDec: ',',
