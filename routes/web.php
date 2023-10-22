@@ -60,6 +60,7 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::get('/pembayaran/export', 'PembayaranController@export');
     Route::get('/pembayaran/transaksi', 'PembayaranController@get_transaksi_belum_bayar');
+    Route::get('/pembayaran/print', 'PembayaranController@print_slip');
     Route::resource('/pembayaran', 'PembayaranController',  [
         'uses' => ['index', 'store', 'show']
     ]);

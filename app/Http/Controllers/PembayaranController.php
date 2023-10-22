@@ -9,9 +9,9 @@ use App\Pelanggan;
 use App\TarifAir;
 use App\Transaksi;
 use Illuminate\Http\Request;
-use DataTables;
 use Excel;
 use Illuminate\Support\Facades\DB;
+use PDF;
 
 class PembayaranController extends Controller
 {
@@ -128,7 +128,7 @@ class PembayaranController extends Controller
             foreach ($data_transaksi as $transaksi) {
                 $arr = [];
                 $actionButtons = '<div class="form-button-action">
-                                    <button data-id="' . $transaksi->transaksi_id . '" title="Cetak Slip" class="btn btn-print btn-action btn-sm btn-primary ml-1" data-toggle="modal" data-target="#modalEditData">
+                                    <button  type="button" data-id="' . $transaksi->transaksi_id . '" title="Cetak Slip" class="btn btn-print btn-action btn-sm btn-primary ml-1">
                                         <i class="fa fa-print"></i>
                                     </button>
                                     <button data-id="' . $transaksi->transaksi_id . '" title="Detail" class="btn btn-show btn-action btn-sm btn-success ml-1" data-toggle="modal" data-target="#modalDetailData">
@@ -239,5 +239,14 @@ class PembayaranController extends Controller
         $filter_data = $request->all();
         $filename = 'data_pembayaran ' . date('Y-m-d H_i_s') . '.xls';
         return Excel::download(new PembayaranExport($filter_data), $filename);
+    }
+
+    public function print_slip(Request $request)
+    {
+        $title = "Slip Pembayaran";
+        $pageWidth = "80mm";
+        $pageHeight = "140mm";
+        $slip = PDF::loadview('pembayaran.slip', compact('title', 'pageWidth', 'pageHeight'));
+        return $slip->stream('Slip Pembayaran.pdf');
     }
 }

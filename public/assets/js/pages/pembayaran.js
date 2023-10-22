@@ -260,3 +260,10 @@ $("#btn-export-excel").click(function (e) {
     params = $('#form-filter').serialize();
     window.open(baseUrl+'/pembayaran/export?'+params, '_blank');
 });
+
+// EXPORT EXCEL
+$(document).on('click', '.btn-print', function (e) {
+    e.preventDefault();
+    console.log('OK');
+    window.open(baseUrl+'/pembayaran/print', '_blank');
+});
