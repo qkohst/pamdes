@@ -264,6 +264,6 @@ $("#btn-export-excel").click(function (e) {
 // EXPORT EXCEL
 $(document).on('click', '.btn-print', function (e) {
     e.preventDefault();
-    console.log('OK');
-    window.open(baseUrl+'/pembayaran/print', '_blank');
+    let transaksi_id = $(this).data('id');
+    window.open(baseUrl+'/pembayaran/print?transaksi_id='+transaksi_id, '_blank');
 });

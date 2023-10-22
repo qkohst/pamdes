@@ -109,9 +109,9 @@
 <body>
     <div class="invoice">
         <div class="invoice-header">
-            <p>PAMDES INDONESIA RAYA</p>
-            <p>JL. SURABAYA TIMUR NOMOR 9 SURABAYA</p>
-            <p>WA/TELP : 085232658965</p>
+            <p>{{$setting_global->nama}}</p>
+            <p>{{$setting_global->alamat}}</p>
+            <p>WA/TELP : {{$setting_global->nomor_hp_wa}}</p>
             <p>===================================</p>
             <p>BUKTI PEMBAYARAN AIR</p>
         </div>
@@ -121,27 +121,27 @@
                 <tr>
                     <td>KD. TRANSAKSI</td>
                     <td>:</td>
-                    <td>2023030004</td>
+                    <td>{{$transaksi->kode}}</td>
                 </tr>
                 <tr>
                     <td>BULAN</td>
                     <td>:</td>
-                    <td>MARET 2023</td>
+                    <td>{{Str::upper($transaksi->bulan_tahun_indo)}}</td>
                 </tr>
                 <tr>
                     <td>KD. PELANGGAN</td>
                     <td>:</td>
-                    <td>PAM0004</td>
+                    <td>{{Str::upper($transaksi->pelanggan->kode)}}</td>
                 </tr>
                 <tr>
                     <td>NAMA</td>
                     <td>:</td>
-                    <td>KUKOH SANTOSO</td>
+                    <td>{{Str::upper($transaksi->pelanggan->nama_lengkap)}}</td>
                 </tr>
                 <tr>
                     <td>TGL. BAYAR</td>
                     <td>:</td>
-                    <td>12 JANUARI 2023</td>
+                    <td>{{Str::upper($transaksi->tanggal_pembayaran_indo)}}</td>
                 </tr>
             </table>
             <p class="garis">=============================</p>
@@ -151,21 +151,21 @@
             <table width="100%">
                 <tr>
                     <td>TOTAL PEMAKAIAN</td>
-                    <td class="angka">10</td>
-                    <td class="angka">4.000</td>
-                    <td class="angka">40.000</td>
+                    <td class="angka">{{$transaksi->total_pemakaian}}</td>
+                    <td class="angka">{{number_format($transaksi->tarif_per_meter,0,",",".")}}</td>
+                    <td class="angka">{{number_format($transaksi->total_pemakaian*$transaksi->tarif_per_meter,0,",",".")}}</td>
                 </tr>
                 <tr>
                     <td>BIAYA PEMELIHARAAN</td>
                     <td class="angka">1</td>
-                    <td class="angka">0</td>
-                    <td class="angka">0</td>
+                    <td class="angka">{{number_format($transaksi->biaya_pemeliharaan,0,",",".")}}</td>
+                    <td class="angka">{{number_format($transaksi->biaya_pemeliharaan,0,",",".")}}</td>
                 </tr>
                 <tr>
                     <td>BIAYA ADMINISTRASI</td>
                     <td class="angka">1</td>
-                    <td class="angka">0</td>
-                    <td class="angka">0</td>
+                    <td class="angka">{{number_format($transaksi->biaya_administrasi,0,",",".")}}</td>
+                    <td class="angka">{{number_format($transaksi->biaya_administrasi,0,",",".")}}</td>
                 </tr>
             </table>
             <p class="garis">=============================</p>
@@ -174,31 +174,26 @@
             <table width="100%">
                 <tr>
                     <td>TOTAL TAGIHAN</td>
-                    <td class="angka">40.000</td>
+                    <td class="angka">{{number_format($transaksi->total_tagihan,0,",",".")}}</td>
                 </tr>
                 <tr>
                     <td>PEMBAYARAN</td>
-                    <td class="angka">40.000</td>
+                    <td class="angka">{{number_format($transaksi->total_tagihan,0,",",".")}}</td>
                 </tr>
             </table>
             <p class="garis">=============================</p>
         </div>
 
-        <p class="timestamp">PETUGAS : KUKOH SANTOSO | 08 JANUARI 2023 18:00:00 WIB</p>
+        <p class="timestamp">PETUGAS : {{Str::upper($petugas)}}</p>
+        <p class="timestamp">DICETAK : {{Str::upper($waktu_cetak)}}</p>
         <p class="garis">=============================</p>
 
         <div class="thank-you">
             <p>===TERIMA KASIH===</p>
-            <p>PAMDES INDONESIA RAYA</p>
-            <p>JL. SURABAYA TIMUR NOMOR 9 SURABAYA</p>
+            <p>{{$setting_global->nama}}</p>
+            <p>{{$setting_global->alamat}}</p>
         </div>
     </div>
-
-    <script>
-        window.onload = function() {
-            window.print(); // Ubah 500 menjadi waktu yang sesuai jika diperlukan
-        };
-    </script>
 </body>
 
 </html>

@@ -6,10 +6,12 @@ use App\Exports\PembayaranExport;
 use App\Helpers\NumberFormatHelper;
 use App\Helpers\OptionPeriodeHelper;
 use App\Pelanggan;
+use App\SettingGlobal;
 use App\TarifAir;
 use App\Transaksi;
 use Illuminate\Http\Request;
 use Excel;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use PDF;
 
@@ -243,10 +245,12 @@ class PembayaranController extends Controller
 
     public function print_slip(Request $request)
     {
-        $title = "Slip Pembayaran";
-        $pageWidth = "80mm";
-        $pageHeight = "140mm";
-        $slip = PDF::loadview('pembayaran.slip', compact('title', 'pageWidth', 'pageHeight'));
-        return $slip->stream('Slip Pembayaran.pdf');
+        $transaksi = Transaksi::findorfail($request->transaksi_id);
+        $setting_global = SettingGlobal::first();
+        $petugas = Auth::user()->nama;
+        $waktu_cetak = OptionPeriodeHelper::tglIndoFull(date("Y-m-d")) . " " . date("H:i:s") . " WIB";
+        $title = "SLIP PEMBAYARAN " . $transaksi->kode;
+        $slip = PDF::loadview('pembayaran.slip', compact('title', 'transaksi', 'setting_global', 'petugas', 'waktu_cetak'));
+        return $slip->stream('SLIP PEMBAYARAN ' . $transaksi->kode . '.pdf');
     }
 }
