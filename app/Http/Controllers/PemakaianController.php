@@ -8,13 +8,20 @@ use App\Imports\TransaksiImport;
 use App\Pelanggan;
 use App\Transaksi;
 use Illuminate\Http\Request;
-use DataTables;
 use Excel;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Storage;
 
 class PemakaianController extends Controller
 {
+    public static $columnames = [
+        0 => 'aksi',
+        1 => 'kode_transaksi',
+        2 => 'bulan_tahun_indo',
+        3 => 'nama_pelanggan',
+        4 => 'total_pemakaian',
+    ];
     /**
      * Display a listing of the resource.
      *
@@ -28,50 +35,114 @@ class PemakaianController extends Controller
         $data_pelanggan = Pelanggan::where('is_delete', false)->where('status', true)->get();
 
         if ($request->ajax()) {
-            $data_transaksi = Transaksi::where('is_delete', false)->where('status', false)->get();
             // FILTER
             $filter_record = (isset($request->filter_record)) ? $request->filter_record : '';
             $params_array = [];
             parse_str($filter_record, $params_array);
+            $filter = '';
             if (!empty($params_array)) {
                 foreach ($params_array as $key => $value) {
                     if ($value != null && $value != "" && $key == "filter_kode") {
-                        $data_transaksi = $data_transaksi->filter(function ($transaski) use ($value) {
-                            return strpos(strtolower($transaski->kode), strtolower($value)) !== false;
-                        });
+                        $filter .= " AND t.kode LIKE '%" . $value . "%'";
                     }
                     if ($value != null && $value != "" && $key == "filter_bulan_tahun") {
-                        $data_transaksi = $data_transaksi->where('bulan_tahun', $value);
+                        $filter .= " AND t.bulan_tahun = '" . $value . "'";
                     }
                     if ($value != null && $value != "" && $key == "filter_pelanggan") {
-                        $data_transaksi = $data_transaksi->where('pelanggan_id', $value);
+                        $filter .= " AND t.pelanggan_id = " . $value . "";
                     }
                 }
             }
 
+            // SEARCHING
+            $search = $request->search['value'];
+            $searching = '';
+            if (!empty($search)) {
+                $searching = " AND (
+                    t.kode LIKE '%" . $search . "%' OR
+                    CONCAT(
+                        CASE SUBSTRING(t.bulan_tahun, 6, 2)
+                            WHEN '01' THEN 'Januari'
+                            WHEN '02' THEN 'Februari'
+                            WHEN '03' THEN 'Maret'
+                            WHEN '04' THEN 'April'
+                            WHEN '05' THEN 'Mei'
+                            WHEN '06' THEN 'Juni'
+                            WHEN '07' THEN 'Juli'
+                            WHEN '08' THEN 'Agustus'
+                            WHEN '09' THEN 'September'
+                            WHEN '10' THEN 'Oktober'
+                            WHEN '11' THEN 'November'
+                            WHEN '12' THEN 'Desember'
+                        END, ' ', SUBSTRING(t.bulan_tahun, 1, 4)) LIKE '%" . $search . "%' OR
+                    CONCAT(p.kode, ' | ', p.nama_lengkap) LIKE '%" . $search . "%' OR
+                    (t.pemakaian_saat_ini - t.pemakaian_sebelumnya) LIKE '%" . $search . "%'
+                )";
+            }
+
+            // SORTING & LIMIT
+            $sorting = " ORDER BY " . self::$columnames[$request->order[0]['column']] . " " . $request->order[0]['dir'];
+            $limit = " LIMIT " . $request->length . " OFFSET " . $request->start;
+
+            // MAIN QUERY
+            $query = 'SELECT t.id as transaksi_id, t.kode as kode_transaksi, 
+                        CONCAT(
+                            CASE SUBSTRING(t.bulan_tahun, 6, 2)
+                                WHEN "01" THEN "Januari"
+                                WHEN "02" THEN "Februari"
+                                WHEN "03" THEN "Maret"
+                                WHEN "04" THEN "April"
+                                WHEN "05" THEN "Mei"
+                                WHEN "06" THEN "Juni"
+                                WHEN "07" THEN "Juli"
+                                WHEN "08" THEN "Agustus"
+                                WHEN "09" THEN "September"
+                                WHEN "10" THEN "Oktober"
+                                WHEN "11" THEN "November"
+                                WHEN "12" THEN "Desember"
+                            END, " ", SUBSTRING(t.bulan_tahun, 1, 4)) AS bulan_tahun_indo, 
+                        CONCAT(p.kode, " | ", p.nama_lengkap) AS nama_pelanggan, 
+                        (t.pemakaian_saat_ini - t.pemakaian_sebelumnya) AS total_pemakaian 
+                        FROM transaksi AS t
+                        INNER JOIN pelanggan AS p
+                        ON t.pelanggan_id = p.id
+                        where t.status = 0 AND t.is_delete = 0';
+
+            $all_transaksi = DB::select($query);
+            $totalData = count($all_transaksi);
+            $transaksi_filtered = DB::select($query . $searching . $filter);
+            $totalFiltered = count($transaksi_filtered);
+
+            $data_transaksi = DB::select($query . $searching . $filter . $sorting . $limit);
             // RETURN DATA
-            return DataTables::of($data_transaksi)
-                ->addColumn('bulan_tahun_indo', function ($transaksi) {
-                    return $transaksi->bulan_tahun_indo;
-                })
-                ->addColumn('nama_pelanggan', function ($transaksi) {
-                    return $transaksi->pelanggan->kode . ' | ' . $transaksi->pelanggan->nama_lengkap;
-                })
-                ->addColumn('total_pemakaian', function ($transaksi) {
-                    return NumberFormatHelper::decimal($transaksi->total_pemakaian);
-                })
-                ->addColumn('action', function ($transaksi) {
-                    $actionButtons = '<div class="form-button-action">
-                                        <button data-id="' . $transaksi->id . ' title="Edit" class="btn btn-edit btn-action btn-sm btn-primary ml-1" data-toggle="modal" data-target="#modalEditData">
-                                            <i class="fa fa-pen"></i>
-                                        </button>
-                                        <button type="button" data-id="' . $transaksi->id . ' title="Hapus" class="btn btn-delete btn-action btn-sm btn-danger ml-1">
-                                            <i class="fa fa-trash"></i>
-                                        </button>
-                                    </div>';
-                    return $actionButtons;
-                })
-                ->make(true);
+            $resultData = collect();
+            foreach ($data_transaksi as $transaksi) {
+                $arr = [];
+                $actionButtons = '<div class="form-button-action">
+                                <button data-id="' . $transaksi->transaksi_id . '" title="Edit" class="btn btn-edit btn-action btn-sm btn-primary ml-1" data-toggle="modal" data-target="#modalEditData">
+                                    <i class="fa fa-pen"></i>
+                                </button>
+                                <button type="button" data-id="' . $transaksi->transaksi_id . '" title="Hapus" class="btn btn-delete btn-action btn-sm btn-danger ml-1">
+                                    <i class="fa fa-trash"></i>
+                                </button>
+                            </div>';
+
+                $arr['action'] = $actionButtons;
+                $arr['kode'] = $transaksi->kode_transaksi;
+                $arr['bulan_tahun_indo'] = $transaksi->bulan_tahun_indo;
+                $arr['nama_pelanggan'] =  $transaksi->nama_pelanggan;
+                $arr['total_pemakaian'] = NumberFormatHelper::decimal($transaksi->total_pemakaian);
+                $resultData->push($arr);
+            }
+
+            $response = [
+                "draw" => intval($request->draw),
+                "recordsTotal" => $totalData,
+                "recordsFiltered" => $totalFiltered,
+                "data" => $resultData,
+            ];
+
+            return response()->json($response);
         };
         return view('pemakaian.index', compact('title', 'pagejs', 'data_pelanggan', 'option_bulan_tahun'));
     }

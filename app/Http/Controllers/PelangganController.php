@@ -5,14 +5,24 @@ namespace App\Http\Controllers;
 use App\Exports\PelangganExport;
 use App\Imports\PelangganImport;
 use App\Pelanggan;
+use App\Transaksi;
 use Illuminate\Http\Request;
-use DataTables;
 use Excel;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Storage;
 
 class PelangganController extends Controller
 {
+    public static $columnames = [
+        0 => 'aksi',
+        1 => 'kode',
+        2 => 'nama_lengkap',
+        3 => 'nomor_hp_wa',
+        4 => 'alamat',
+        5 => 'status_str',
+    ];
+
     /**
      * Display a listing of the resource.
      *
@@ -23,48 +33,91 @@ class PelangganController extends Controller
         $title = 'Pelanggan';
         $pagejs = 'pelanggan.js';
         if ($request->ajax()) {
-            $data_pelanggan = Pelanggan::where('is_delete', false)->get();
             // FILTER
             $filter_record = (isset($request->filter_record)) ? $request->filter_record : '';
             $params_array = [];
             parse_str($filter_record, $params_array);
+            $filter = '';
             if (!empty($params_array)) {
                 foreach ($params_array as $key => $value) {
                     if ($value != null && $value != "" && $key == "filter_kode") {
-                        $data_pelanggan = $data_pelanggan->filter(function ($pelanggan) use ($value) {
-                            return strpos(strtolower($pelanggan->kode), strtolower($value)) !== false;
-                        });
+                        $filter .= " AND kode LIKE '%" . $value . "%'";
                     }
                     if ($value != null && $value != "" && $key == "filter_nama_lengkap") {
-                        $data_pelanggan = $data_pelanggan->filter(function ($pelanggan) use ($value) {
-                            return strpos(strtolower($pelanggan->nama_lengkap), strtolower($value)) !== false;
-                        });
+                        $filter .= " AND nama_lengkap LIKE '%" . $value . "%'";
                     }
                     if ($value != null && $value != "" && $key == "filter_status") {
-                        $data_pelanggan = $data_pelanggan->where('status', $value);
+                        $filter .= " AND status = " . $value . "";
                     }
                 }
             }
 
-            // BERIKAN PENGECEKAN KETIKA SUDAH DIPAKAI TRANSAKSI TIDAK BISA DIHAPUS
+            // SEARCHING
+            $search = $request->search['value'];
+            $searching = '';
+            if (!empty($search)) {
+                $searching = " AND (
+                    kode LIKE '%" . $search . "%' OR
+                    nama_lengkap LIKE '%" . $search . "%' OR
+                    nomor_hp_wa LIKE '%" . $search . "%' OR
+                    alamat LIKE '%" . $search . "%' OR
+                    IF(status = 1, 'Aktif', 'Non Aktif') LIKE '%" . $search . "%'
+                )";
+            }
+
+            // SORTING & LIMIT
+            $sorting = " ORDER BY " . self::$columnames[$request->order[0]['column']] . " " . $request->order[0]['dir'];
+            $limit = " LIMIT " . $request->length . " OFFSET " . $request->start;
+
+            // MAIN QUERY
+            $query = 'SELECT id, kode, nama_lengkap, nomor_hp_wa, alamat, IF(status = 1, "Aktif", "Non Aktif") AS status_str  
+                        FROM pelanggan
+                        where is_delete = 0';
+
+            $all_pelanggan = DB::select($query);
+            $totalData = count($all_pelanggan);
+            $pelanggan_filtered = DB::select($query . $searching . $filter);
+            $totalFiltered = count($pelanggan_filtered);
+
+            $data_pelanggan = DB::select($query . $searching . $filter . $sorting . $limit);
 
             // RETURN DATA
-            return DataTables::of($data_pelanggan)
-                ->addColumn('status_pelanggan', function ($pelanggan) {
-                    return $pelanggan->status_pelanggan;
-                })
-                ->addColumn('action', function ($pelanggan) {
-                    $actionButtons = '<div class="form-button-action">
-                                        <button data-id="' . $pelanggan->id . ' title="Edit" class="btn btn-edit btn-action btn-sm btn-primary ml-1" data-toggle="modal" data-target="#modalEditData">
-                                            <i class="fa fa-pen"></i>
-                                        </button>
-                                        <button type="button" data-id="' . $pelanggan->id . ' title="Hapus" class="btn btn-delete btn-action btn-sm btn-danger ml-1">
-                                            <i class="fa fa-trash"></i>
-                                        </button>
-                                    </div>';
-                    return $actionButtons;
-                })
-                ->make(true);
+            $resultData = collect();
+            foreach ($data_pelanggan as $pelanggan) {
+                $arr = [];
+                // cek data 
+                $is_used = Transaksi::where("is_delete", false)->where("pelanggan_id", $pelanggan->id)->count();
+                $can_delete = '';
+                if ($is_used > 0) {
+                    $can_delete = 'disabled';
+                }
+
+                $actionButtons = '<div class="form-button-action">
+                                 <button data-id="' . $pelanggan->id . '" title="Edit" class="btn btn-edit btn-action btn-sm btn-primary ml-1" data-toggle="modal" data-target="#modalEditData">
+                                     <i class="fa fa-pen"></i>
+                                 </button>
+                                 <button type="button" ' . $can_delete . ' data-id="' . $pelanggan->id . '" title="Hapus" class="btn btn-delete btn-action btn-sm btn-danger ml-1">
+                                     <i class="fa fa-trash"></i>
+                                 </button>
+                             </div>';
+
+                $arr['action'] = $actionButtons;
+                $arr['kode'] = $pelanggan->kode;
+                $arr['nama_lengkap'] = $pelanggan->nama_lengkap;
+                $arr['nomor_hp_wa'] =  $pelanggan->nomor_hp_wa;
+                $arr['alamat'] =  $pelanggan->alamat;
+                $arr['status_str'] =  $pelanggan->status_str;
+                $resultData->push($arr);
+            }
+
+            $response = [
+                "draw" => intval($request->draw),
+                "recordsTotal" => $totalData,
+                "recordsFiltered" => $totalFiltered,
+                "data" => $resultData,
+            ];
+
+            return response()->json($response);
         };
         return view('pelanggan.index', compact('title', 'pagejs'));
     }
@@ -158,6 +211,16 @@ class PelangganController extends Controller
     public function destroy($id)
     {
         $pelanggan = Pelanggan::findorfail($id);
+        // cek data 
+        $is_used = Transaksi::where("is_delete", false)->where("pelanggan_id", $pelanggan->id)->count();
+        if ($is_used > 0) {
+            $response = [
+                'status'  => 'error',
+                'message' => 'Data pelanggan sudah digunakan pada transaksi'
+            ];
+            return response()->json($response, 200);
+        }
+
         $pelanggan->is_delete = true;
         $pelanggan->save();
 

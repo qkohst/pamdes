@@ -52,8 +52,26 @@ $(document).ready(function () {
         fixedColumns: {
             left: 1
         },
-        // scrollX: true,
-        deferRender: true
+        deferRender: true,
+        language: {
+            sEmptyTable: "Tidak ada data yang tersedia dalam tabel",
+            sInfo: "Menampilkan _START_ hingga _END_ dari _TOTAL_ data",
+            sInfoEmpty: "Menampilkan 0 hingga 0 dari 0 data",
+            sInfoFiltered: "(disaring dari total _MAX_ data)",
+            sInfoPostFix: "",
+            sInfoThousands: ".",
+            sLengthMenu: "Tampilkan _MENU_ data",
+            sLoadingRecords: "Memuat...",
+            sProcessing: "Sedang memproses...",
+            sSearch: "Cari:",
+            sZeroRecords: "Data tidak ditemukan",
+            oPaginate: {
+                sFirst: "Pertama",
+                sLast: "Terakhir",
+                sNext: "Selanjutnya",
+                sPrevious: "Sebelumnya"
+            },
+        }
     });
 });
 
