@@ -1,5 +1,6 @@
 <?php
 
+use App\SettingGlobal;
 use App\TarifAir;
 use App\User;
 use Illuminate\Database\Seeder;
@@ -27,6 +28,12 @@ class DatabaseSeeder extends Seeder
             'tarif_per_meter' => 4000,
             'biaya_pemeliharaan' => 5000,
             'biaya_administrasi' => 6000,
+        ]);
+
+        SettingGlobal::create([
+            'nama' => 'PAMDES INDONESIA RAYA',
+            'alamat' => 'JL. Indonesia Raya Nomor 9 Surabaya',
+            'nomor_hp_wa' => '085236598745',
         ]);
     }
 }
