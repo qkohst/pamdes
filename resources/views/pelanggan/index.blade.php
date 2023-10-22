@@ -92,7 +92,7 @@
 </div>
 
 <!-- Modal Add -->
-<div class="modal fade" id="modalAddData" tabindex="-1" role="dialog" aria-hidden="true">
+<div class="modal fade" id="modalAddData" role="dialog" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -143,7 +143,7 @@
 <!-- End Modal Add -->
 
 <!-- Modal Edit -->
-<div class="modal fade" id="modalEditData" tabindex="-1" role="dialog" aria-hidden="true">
+<div class="modal fade" id="modalEditData" role="dialog" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -204,7 +204,7 @@
 <!-- End Modal Edit -->
 
 <!-- Modal Import -->
-<div class="modal fade" id="modalImportData" tabindex="-1" role="dialog" aria-hidden="true">
+<div class="modal fade" id="modalImportData" role="dialog" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">

@@ -41,7 +41,6 @@
 <script src="../assets/js/plugin/jqvmap/maps/jquery.vmap.world.js"></script>
 
 <!-- Sweet Alert -->
-<!-- <script src="../assets/js/plugin/sweetalert/sweetalert.min.js"></script> -->
 <script src="../assets/auth/plugins/sweetalert2/dist/sweetalert2.min.js"></script>
 
 <!-- Atlantis JS -->
