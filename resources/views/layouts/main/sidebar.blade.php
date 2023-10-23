@@ -95,7 +95,7 @@
                  </li>
 
                  <li class="nav-item">
-                     <a href="#">
+                     <a href="/laporan">
                          <i class="fas fa-file"></i>
                          <p>Laporan</p>
                      </a>

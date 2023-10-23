@@ -358,6 +358,7 @@ $("#btn-upload").click(function (e) {
 // HAPUS FILE YANG DIPILIH KETIKA POP UP DITUTUP
 $('#modalImportData').on('hidden.bs.modal', function() {
     $('#file_import').val('');
+    $('.file_import-invalid-message').remove();
 });
 
 // EXPORT EXCEL

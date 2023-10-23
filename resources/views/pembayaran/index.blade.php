@@ -267,7 +267,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">BATAL</button>
-                <button type="button" id="btn-cetak" class="btn btn-primary btn-sm">CETAK</button>
+                <button type="button" id="btn-cetak" class="btn btn-primary btn-sm">PRINT</button>
             </div>
             </form>
         </div>

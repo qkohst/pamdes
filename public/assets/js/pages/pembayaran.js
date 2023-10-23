@@ -40,12 +40,22 @@ $(document).ready(function () {
                 name: "status_str"
             },
         ],
-        columnDefs: [{
-            targets: [0],
-            orderable: false,
-            searchable: false,
-            className: 'w-col-action'
-        }],
+        columnDefs: [
+            {
+                targets: [0],
+                orderable: false,
+                searchable: false,
+                className: 'w-col-action'
+            },
+            {
+                targets: [2],
+                className: 'w-col-tanggal'
+            },
+            {
+                targets: [3],
+                className: 'w-col-nama-pelanggan'
+            }
+        ],
         order: [
             [1, 'desc']
         ],

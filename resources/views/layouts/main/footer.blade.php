@@ -239,6 +239,10 @@
         resetForm('form-edit');
     });
 
+    $('#modalPrintAll').on('hidden.bs.modal', function() {
+        resetForm('form-print-all');
+    });
+
     $('.hanya-angka').on('input', function() {
         this.value = this.value.replace(/[^0-9]/g, '');
     });
