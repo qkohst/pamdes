@@ -5,7 +5,7 @@
     <title>{{$title}}</title>
     <style>
         @page {
-            size: 80mm 140mm;
+            size: 77mm 140mm;
             /* Lebar 8 cm, tinggi sesuai kebutuhan */
             margin: 1mm;
             /* Margin diatur sesuai kebutuhan */
@@ -19,7 +19,7 @@
             width: 72mm;
             /* Lebar kertas 8 cm */
             margin: 0 auto;
-            padding: 8px;
+            padding: 6px;
             /* border: 1px solid #000; */
         }
 

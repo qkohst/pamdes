@@ -25,7 +25,7 @@
                         <div class="col-sm-9">
                             <select class="form-control select2 required" id="ukuran_kertas_nota" name="ukuran_kertas_nota" style="width: 100%;">
                                 <option value="">Pilih Data</option>
-                                <option value="80" @if($setting_global->ukuran_kertas_nota==80) selected @endif>80 mm</option>
+                                <option value="77" @if($setting_global->ukuran_kertas_nota==77) selected @endif>77 mm</option>
                                 <option value="55" @if($setting_global->ukuran_kertas_nota==55) selected @endif>55 mm</option>
                             </select>
                         </div>

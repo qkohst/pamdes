@@ -57,6 +57,10 @@
                         <div class="card-head-row">
                             <div class="card-title">Data {{$title}}</div>
                             <div class="card-tools">
+                                <button class="btn btn-info btn-border btn-round btn-sm mr-1" id="btn-print-all" data-toggle="modal" data-target="#modalPrintAll">
+                                    <i class="fa fa-print mr-1"></i>
+                                    PRINT
+                                </button>
                                 <button class="btn btn-info btn-border btn-round btn-sm mr-1" id="btn-export-excel">
                                     <i class="fa fa-file-download mr-1"></i>
                                     EXPORT EXCEL
@@ -233,42 +237,42 @@
 </div>
 <!-- End Modal Edit -->
 
-<!-- Modal Import -->
-<div class="modal fade" id="modalImportData" role="dialog" aria-hidden="true">
+<!-- Modal modalPrintAll -->
+<div class="modal fade" id="modalPrintAll" role="dialog" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">
-                    Import {{$title}}
+                    Print Slip {{$title}}
                 </h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body py-0">
-                <form id="form-import">
-                    <div class="alert alert-primary mt-3" role="alert">
-                        <h5>Download format import</h5>
-                        <p>Silahkan download file format import melalui tombol dibawah ini.</p>
-                        <button class="btn btn-sm btn-primary text-white" name="btn-dowload-format" id="btn-dowload-format"><i class="fas fa-file-download mr-1"></i> Download</button>
-                    </div>
+                <form id="form-print-all">
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">
-                                <label for="file_import">File Import</label>
-                                <input type="file" class="form-control no-spasi uppercase required" id="file_import" name="file_import" accept=".xlsx, .xls">
+                                <label for="periode_bulan">Bulan Tahun</label>
+                                <select class="form-control select2" id="periode_bulan" name="periode_bulan" style="width: 100%;">
+                                    <option value="">Pilih Data</option>
+                                    @foreach ($data_transaksi_sudah_bayar as $transaksi)
+                                    <option value="{{ $transaksi->bulan_tahun }}">{{ $transaksi->bulan_tahun_indo }}</option>
+                                    @endforeach
+                                </select>
                             </div>
                         </div>
                     </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">BATAL</button>
-                <button type="button" id="btn-upload" class="btn btn-primary btn-sm">UPLOAD</button>
+                <button type="button" id="btn-cetak" class="btn btn-primary btn-sm">CETAK</button>
             </div>
             </form>
         </div>
     </div>
 </div>
-<!-- End Modal Import -->
+<!-- End Modal modalPrintAll -->
 
 @include('layouts.main.footer')

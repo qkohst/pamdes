@@ -39,7 +39,7 @@ class PembayaranController extends Controller
         $option_bulan_tahun = OptionPeriodeHelper::getOptionBulanTahun();
         $data_pelanggan = Pelanggan::where('is_delete', false)->get();
         $data_transaksi_belum_bayar = Transaksi::where('is_delete', false)->where('status', false)->get();
-
+        $data_transaksi_sudah_bayar = Transaksi::where('is_delete', false)->where('status', true)->groupBy('bulan_tahun')->orderBy('bulan_tahun', 'DESC')->get();
         if ($request->ajax()) {
             // FILTER
             $filter_record = (isset($request->filter_record)) ? $request->filter_record : '';
@@ -157,7 +157,7 @@ class PembayaranController extends Controller
 
             return response()->json($response);
         };
-        return view('pembayaran.index', compact('title', 'pagejs', 'data_pelanggan', 'option_bulan_tahun', 'data_transaksi_belum_bayar'));
+        return view('pembayaran.index', compact('title', 'pagejs', 'data_pelanggan', 'option_bulan_tahun', 'data_transaksi_belum_bayar', 'data_transaksi_sudah_bayar'));
     }
 
     /**
@@ -250,12 +250,28 @@ class PembayaranController extends Controller
         $petugas = Auth::user()->nama;
         $waktu_cetak = OptionPeriodeHelper::tglIndoFull(date("Y-m-d")) . " " . date("H:i:s") . " WIB";
         $title = "SLIP PEMBAYARAN " . $transaksi->kode;
-        if ($setting_global->ukuran_kertas_nota == 80) {
-            $slip = PDF::loadview('pembayaran.slip_80', compact('title', 'transaksi', 'setting_global', 'petugas', 'waktu_cetak'));
+        if ($setting_global->ukuran_kertas_nota == 77) {
+            $slip = PDF::loadview('pembayaran.slip_77', compact('title', 'transaksi', 'setting_global', 'petugas', 'waktu_cetak'));
         }
         if ($setting_global->ukuran_kertas_nota == 55) {
             $slip = PDF::loadview('pembayaran.slip_55', compact('title', 'transaksi', 'setting_global', 'petugas', 'waktu_cetak'));
         }
         return $slip->stream('SLIP PEMBAYARAN ' . $transaksi->kode . '.pdf');
+    }
+
+    public function print_all(Request $request)
+    {
+        $data_transaksi = Transaksi::where('bulan_tahun', $request->periode_bulan)->where('status', true)->get();
+        $setting_global = SettingGlobal::first();
+        $petugas = Auth::user()->nama;
+        $waktu_cetak = OptionPeriodeHelper::tglIndoFull(date("Y-m-d")) . " " . date("H:i:s") . " WIB";
+        $title = "SLIP PEMBAYARAN " . $request->periode_bulan;
+        if ($setting_global->ukuran_kertas_nota == 77) {
+            $slip = PDF::loadview('pembayaran.slip_77_aal', compact('title', 'data_transaksi', 'setting_global', 'petugas', 'waktu_cetak'));
+        }
+        if ($setting_global->ukuran_kertas_nota == 55) {
+            $slip = PDF::loadview('pembayaran.slip_55_all', compact('title', 'data_transaksi', 'setting_global', 'petugas', 'waktu_cetak'));
+        }
+        return $slip->stream('SLIP PEMBAYARAN ' . $request->periode_bulan . '.pdf');
     }
 }

@@ -261,9 +261,21 @@ $("#btn-export-excel").click(function (e) {
     window.open(baseUrl+'/pembayaran/export?'+params, '_blank');
 });
 
-// EXPORT EXCEL
+// PRINT SLIP TUNGGAL
 $(document).on('click', '.btn-print', function (e) {
     e.preventDefault();
     let transaksi_id = $(this).data('id');
     window.open(baseUrl+'/pembayaran/print?transaksi_id='+transaksi_id, '_blank');
+});
+
+// PRINT SLIP ALL
+$("#btn-cetak").click(function (e) {
+    e.preventDefault();
+    let form = $('#form-print-all');
+    let periode_bulan = form.find("select[name=periode_bulan]").val(); 
+    if(periode_bulan == ""){
+        invalidMessage(form.find("select[name=periode_bulan]"), 'Bulan tahun harus diisi');
+        return false;
+    }
+    window.open(baseUrl+'/pembayaran/print-all?periode_bulan='+periode_bulan, '_blank');
 });
