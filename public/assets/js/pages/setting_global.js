@@ -7,6 +7,7 @@ $("#btn-save").click(function (e) {
         let nama_instansi = form.find("input[name=nama_instansi]").val();
         let alamat = form.find("input[name=alamat]").val();
         let nomor_hp_wa = form.find("input[name=nomor_hp_wa]").val();
+        let ukuran_kertas_nota = form.find("select[name=ukuran_kertas_nota]").val();
 
         if(nama_instansi.length > 100){
             invalidMessage(form.find("input[name=nama_instansi]"), 'Nama instansi maximal 100 karakter');
@@ -40,7 +41,8 @@ $("#btn-save").click(function (e) {
                     data: {
                         nama_instansi: nama_instansi,
                         alamat: alamat,
-                        nomor_hp_wa: nomor_hp_wa
+                        nomor_hp_wa: nomor_hp_wa,
+                        ukuran_kertas_nota: ukuran_kertas_nota
                     },
                     dataType: 'json',
                     success: function (data, jqXHR) {

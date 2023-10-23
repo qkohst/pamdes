@@ -32,6 +32,7 @@ class SettingGlobalController extends Controller
         $setting_global->nama = $request->nama_instansi;
         $setting_global->alamat = $request->alamat;
         $setting_global->nomor_hp_wa = $request->nomor_hp_wa;
+        $setting_global->ukuran_kertas_nota = $request->ukuran_kertas_nota;
         $setting_global->save();
 
         $response = [

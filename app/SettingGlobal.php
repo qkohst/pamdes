@@ -10,6 +10,7 @@ class SettingGlobal extends Model
     protected $fillable = [
         'nama',
         'alamat',
-        'nomor_hp_wa'
+        'nomor_hp_wa',
+        'ukuran_kertas_nota'
     ];
 }

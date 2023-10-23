@@ -21,6 +21,14 @@
                         <div class="col-sm-9">
                             <input type="text" class="form-control hanya-angka required" id="nomor_hp_wa" name="nomor_hp_wa" value="{{$setting_global->nomor_hp_wa}}">
                         </div>
+                        <label for="ukuran_kertas_nota" class="col-sm-3 col-form-label">Ukuran Kertas Nota</label>
+                        <div class="col-sm-9">
+                            <select class="form-control select2 required" id="ukuran_kertas_nota" name="ukuran_kertas_nota" style="width: 100%;">
+                                <option value="">Pilih Data</option>
+                                <option value="80" @if($setting_global->ukuran_kertas_nota==80) selected @endif>80 mm</option>
+                                <option value="55" @if($setting_global->ukuran_kertas_nota==55) selected @endif>55 mm</option>
+                            </select>
+                        </div>
                     </div>
                 </form>
             </div>

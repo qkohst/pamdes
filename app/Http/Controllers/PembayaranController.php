@@ -250,7 +250,12 @@ class PembayaranController extends Controller
         $petugas = Auth::user()->nama;
         $waktu_cetak = OptionPeriodeHelper::tglIndoFull(date("Y-m-d")) . " " . date("H:i:s") . " WIB";
         $title = "SLIP PEMBAYARAN " . $transaksi->kode;
-        $slip = PDF::loadview('pembayaran.slip', compact('title', 'transaksi', 'setting_global', 'petugas', 'waktu_cetak'));
+        if ($setting_global->ukuran_kertas_nota == 80) {
+            $slip = PDF::loadview('pembayaran.slip_80', compact('title', 'transaksi', 'setting_global', 'petugas', 'waktu_cetak'));
+        }
+        if ($setting_global->ukuran_kertas_nota == 55) {
+            $slip = PDF::loadview('pembayaran.slip_55', compact('title', 'transaksi', 'setting_global', 'petugas', 'waktu_cetak'));
+        }
         return $slip->stream('SLIP PEMBAYARAN ' . $transaksi->kode . '.pdf');
     }
 }

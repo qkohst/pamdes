@@ -34,6 +34,7 @@ class DatabaseSeeder extends Seeder
             'nama' => 'PAMDES INDONESIA RAYA',
             'alamat' => 'JL. Indonesia Raya Nomor 9 Surabaya',
             'nomor_hp_wa' => '085236598745',
+            'ukuran_kertas_nota' => 80
         ]);
     }
 }
