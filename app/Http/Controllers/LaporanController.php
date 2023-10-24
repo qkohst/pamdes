@@ -2,12 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\LaporanExport;
 use App\Helpers\NumberFormatHelper;
 use App\Helpers\OptionPeriodeHelper;
 use App\Pelanggan;
 use App\Transaksi;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Excel;
+use Illuminate\Support\Facades\Auth;
+use PDF;
 
 class LaporanController extends Controller
 {
@@ -148,69 +152,35 @@ class LaporanController extends Controller
         return view('laporan.index', compact('title', 'pagejs', 'data_pelanggan', 'option_bulan_tahun', 'data_transaksi_belum_bayar', 'data_transaksi_sudah_bayar'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+    public function export(Request $request)
     {
-        //
+        $filter_data = $request->all();
+        $filename = 'laporan_transaksi ' . date('Y-m-d H_i_s') . '.xls';
+        return Excel::download(new LaporanExport($filter_data), $filename);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+    public function print(Request $request)
     {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
+        $data_laporan = Transaksi::where('is_delete', false)->where('status', true)->orderBy('bulan_tahun', 'DESC')->get();
+        $filter_data = $request->all();
+        foreach ($filter_data as $key => $value) {
+            if ($value != null && $value != "" && $key == "filter_kode") {
+                $data_laporan = $data_laporan->filter(function ($transaski) use ($value) {
+                    return strpos(strtolower($transaski->kode), strtolower($value)) !== false;
+                });
+            }
+            if ($value != null && $value != "" && $key == "filter_bulan_tahun") {
+                $data_laporan = $data_laporan->where('bulan_tahun', $value);
+            }
+            if ($value != null && $value != "" && $key == "filter_pelanggan") {
+                $data_laporan = $data_laporan->where('pelanggan_id', $value);
+            }
+        }
+        $petugas = Auth::user()->nama;
+        $waktu_cetak = OptionPeriodeHelper::tglIndoFull(date("Y-m-d")) . " " . date("H:i:s") . " WIB";
+        $title = "LAPORAN TRANSAKSI " . date('Y-m-d H_i_s');
+        $slip = PDF::loadview('laporan.print', compact('title', 'data_laporan', 'petugas', 'waktu_cetak'))
+            ->setPaper('a4', 'landscape');
+        return $slip->stream('LAPORAN TRANSAKSI ' . date('Y-m-d H_i_s') . '.pdf');
     }
 }

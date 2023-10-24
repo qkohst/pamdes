@@ -73,12 +73,12 @@
                  </li>
 
                  <li class="nav-item">
-                     <a data-toggle="collapse" href="#sidebarAirku">
+                     <a data-toggle="collapse" href="#sidebarTransaksi">
                          <i class="fas fa-tint"></i>
-                         <p>Airku</p>
+                         <p>Transaksi</p>
                          <span class="caret"></span>
                      </a>
-                     <div class="collapse" id="sidebarAirku">
+                     <div class="collapse" id="sidebarTransaksi">
                          <ul class="nav nav-collapse">
                              <li class="sub-menu">
                                  <a href="/pemakaian">

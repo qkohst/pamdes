@@ -85,7 +85,7 @@
                                     <tr>
                                         <th>Awal</th>
                                         <th>Akhir</th>
-                                        <th>Pemakaian</th>
+                                        <th>Total</th>
                                         <th>Pemakaian</th>
                                         <th>Pemeliharaan</th>
                                         <th>Administrasi</th>

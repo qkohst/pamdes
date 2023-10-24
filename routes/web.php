@@ -66,7 +66,9 @@ Route::group(['middleware' => ['auth']], function () {
     Route::resource('/setting-global', 'SettingGlobalController',  [
         'uses' => ['index', 'store']
     ]);
+    Route::get('/laporan/export', 'LaporanController@export');
+    Route::get('/laporan/print', 'LaporanController@print');
     Route::resource('/laporan', 'LaporanController',  [
-        'uses' => ['index', 'store', 'show']
+        'uses' => ['index']
     ]);
 });

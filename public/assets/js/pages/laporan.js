@@ -126,12 +126,12 @@ $("#btn-reset").click(function (e) {
 $("#btn-export-excel").click(function (e) {
     e.preventDefault();
     params = $('#form-filter').serialize();
-    window.open(baseUrl+'/pembayaran/export?'+params, '_blank');
+    window.open(baseUrl+'/laporan/export?'+params, '_blank');
 });
 
-// PRINT SLIP TUNGGAL
-$(document).on('click', '.btn-print', function (e) {
+// PRINT PRINT
+$("#btn-print").click(function (e) {
     e.preventDefault();
-    let transaksi_id = $(this).data('id');
-    window.open(baseUrl+'/pembayaran/print?transaksi_id='+transaksi_id, '_blank');
+    params = $('#form-filter').serialize();
+    window.open(baseUrl+'/laporan/print?'+params, '_blank');
 });
