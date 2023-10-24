@@ -45,7 +45,6 @@
 <!-- Datatables -->
 <script src="../../assets/js/plugin/datatables/datatables.min.js"></script>
 <script src="../../assets/plugins/select2/js/select2.full.min.js"></script>
-
 <script src="../../assets/plugins/autoNumeric/autoNumeric.js"></script>
 
 
@@ -68,12 +67,6 @@
         $('.select2').select2();
         setAutonumeric();
     });
-
-    // $(".btn-toggle").click(function() {
-    //     $('#table-data').find('thead').addClass('d-none');
-    //     params = $('#form-filter').serialize();
-    //     table.ajax.reload();
-    // });
 
     function setAutonumeric() {
         $('.autonumeric').each(function() {

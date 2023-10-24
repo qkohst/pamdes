@@ -8,6 +8,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}" />
     <link rel="icon" href="../assets/img/logo-2.png" type="image/x-icon" />
     <link rel="stylesheet" href="../assets/auth/css/my-style.css">
+
     <!-- Fonts and icons -->
     <script src="../assets/js/plugin/webfont/webfont.min.js"></script>
     <script>
@@ -25,7 +26,6 @@
         });
     </script>
 
-
     <!-- CSS Files -->
     <link rel="stylesheet" href="../assets/css/bootstrap.min.css">
     <link rel="stylesheet" href="../assets/css/atlantis.min.css">
@@ -38,7 +38,7 @@
 </head>
 
 <body>
-    <div class="wrapper">
+    <div class="wrapper overlay-sidebar">
         <div class='loading-container-1'>
             <div class="loading-overlay-1"></div>
             <div class='loader-1'>
@@ -53,27 +53,18 @@
         </div>
         <div class="main-header">
             <!-- Logo Header -->
-            <div class="logo-header" data-background-color="blue">
-
+            <div class="logo-header" data-background-color="blue2">
                 <a href="/" class="logo text-white font-weight-bolder">
                     <img src="../assets/img/logo.png" alt="navbar brand" class="navbar-brand"> StPamdes
                 </a>
-                <button class="navbar-toggler sidenav-toggler ml-auto" type="button" data-toggle="collapse" data-target="collapse" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon">
-                        <i class="icon-menu"></i>
-                    </span>
-                </button>
-                <div class="nav-toggle">
-                    <button class="btn btn-toggle toggle-sidebar">
-                        <i class="icon-menu"></i>
-                    </button>
-                </div>
             </div>
             <!-- End Logo Header -->
 
             <!-- Navbar Header -->
             <nav class="navbar navbar-header navbar-expand-lg" data-background-color="blue2">
-
+                <ul class="navbar-nav topbar-nav ml-md-auto align-items-center">
+                    <a href="/" class="btn btn-white btn-sm btn-round mr-2">Login</a>
+                </ul>
             </nav>
             <!-- End Navbar -->
         </div>

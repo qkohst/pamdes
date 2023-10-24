@@ -27,7 +27,7 @@
                             </div>
 
                             <button type="submit" class="btn btn-block btn-primary mb-4 mt-2 btn-login">Login</button>
-                            <p class="mb-2 text-muted">Tidak punya akses login ? <a href="#" class="f-w-400">Cek Tagihan</a></p>
+                            <p class="mb-2 text-muted">Tidak punya akses login ? <a href="/cek-tagihan" class="f-w-400">Cek Tagihan</a></p>
                         </div>
                     </form>
                 </div>

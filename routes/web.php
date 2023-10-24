@@ -30,6 +30,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', 'AuthController@index')->name('login');
 Route::post('/', 'AuthController@store')->name('login');
+Route::get('/cek-tagihan', 'AuthController@cek_tagihan');
 
 Route::group(['middleware' => ['auth']], function () {
     Route::get('/dashboard', 'DashboardController@index')->name('dashboard');
