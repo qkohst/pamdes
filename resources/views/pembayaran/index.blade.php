@@ -133,7 +133,7 @@
                             </div>
                         </div>
 
-                        <input type="hidden" name=" transaksi_id">
+                        <input type="hidden" name="transaksi_id">
                         <input type="hidden" class="autonumeric-2" name="tarif_per_meter">
                         <input type="hidden" class="autonumeric-2" name="biaya_pemeliharaan">
                         <input type="hidden" class="autonumeric-2" name="biaya_administrasi">

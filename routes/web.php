@@ -33,6 +33,7 @@ Route::post('/', 'AuthController@store')->name('login');
 
 Route::group(['middleware' => ['auth']], function () {
     Route::get('/dashboard', 'DashboardController@index')->name('dashboard');
+    Route::get('/dashboard/rekap', 'DashboardController@get_rekap_data');
     Route::get('/logout', 'AuthController@logout')->name('logout');
     Route::resource('/profile', 'ProfileController',  [
         'uses' => ['index', 'store']
