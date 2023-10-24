@@ -3,10 +3,10 @@
 
 <head>
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <title>Pamdes | {{$title}}</title>
+    <title>{{$title}} | StPamdes</title>
     <meta content='width=device-width, initial-scale=1.0, shrink-to-fit=no' name='viewport' />
     <meta name="csrf-token" content="{{ csrf_token() }}" />
-    <link rel="icon" href="../assets/img/icon.ico" type="image/x-icon" />
+    <link rel="icon" href="../assets/img/logo-2.png" type="image/x-icon" />
     <link rel="stylesheet" href="../assets/auth/css/my-style.css">
     <!-- Fonts and icons -->
     <script src="../assets/js/plugin/webfont/webfont.min.js"></script>
@@ -35,9 +35,6 @@
     <link rel="stylesheet" href="/assets/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
 
     <link href="../assets/auth/plugins/sweetalert2/dist/sweetalert2.min.css" rel="stylesheet">
-
-    <!-- CSS Just for demo purpose, don't include it in your project -->
-    <!-- <link rel="stylesheet" href="../assets/css/demo.css"> -->
 </head>
 
 <body>
@@ -58,8 +55,8 @@
             <!-- Logo Header -->
             <div class="logo-header" data-background-color="blue">
 
-                <a href="index.html" class="logo">
-                    <img src="../assets/img/logo.svg" alt="navbar brand" class="navbar-brand">
+                <a href="index.html" class="logo text-white font-weight-bolder">
+                    <img src="../assets/img/logo.png" alt="navbar brand" class="navbar-brand"> StPamdes
                 </a>
                 <button class="navbar-toggler sidenav-toggler ml-auto" type="button" data-toggle="collapse" data-target="collapse" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon">

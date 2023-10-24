@@ -61,7 +61,6 @@ class DashboardController extends Controller
             array_push($value_statistic, $value);
         }
 
-
         $result = [
             'pelanggan' => [
                 'aktif' => $pelanggan_aktif,

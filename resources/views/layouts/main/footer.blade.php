@@ -1,7 +1,7 @@
 <footer class="footer">
     <div class="container-fluid">
         <div class="copyright ml-auto">
-            Pamdes V.10 | Developed by <a href="#">Qkoh St</a> | 2023
+            StPamdes V.10 | Developed by <a href="https://www.instagram.com/qkoh_st" target="_blank">Qkoh St</a> | 2023
         </div>
     </div>
 </footer>
@@ -33,9 +33,6 @@
 <!-- Datatables -->
 <script src="../assets/js/plugin/datatables/datatables.min.js"></script>
 
-<!-- Bootstrap Notify -->
-<!-- <script src="../assets/js/plugin/bootstrap-notify/bootstrap-notify.min.js"></script> -->
-
 <!-- jQuery Vector Maps -->
 <script src="../assets/js/plugin/jqvmap/jquery.vmap.min.js"></script>
 <script src="../assets/js/plugin/jqvmap/maps/jquery.vmap.world.js"></script>
@@ -50,10 +47,6 @@
 <script src="../../assets/plugins/select2/js/select2.full.min.js"></script>
 
 <script src="../../assets/plugins/autoNumeric/autoNumeric.js"></script>
-
-<!-- Atlantis DEMO methods, don't include it in your project! -->
-<!-- <script src="../assets/js/setting-demo.js"></script>
-<script src="../assets/js/demo.js"></script> -->
 
 
 <script>

@@ -8,7 +8,7 @@
                     <form id="form-login">
                         <div class="card-body">
                             <div class="login-logo">
-                                <img src="../assets/img/icon.svg" alt="Logo" class="brand-image img-circle">
+                                <img src="../assets/img/logo-2.png" alt="Logo" class="brand-image img-circle">
                                 <p>Login</p>
                             </div>
                             <h4 class="mb-3 f-w-400">Login dengan akun anda</h4>

@@ -8,10 +8,10 @@
                     <form id="form-login">
                         <div class="card-body">
                             <div class="login-logo">
-                                <img src="../assets/img/icon.svg" alt="Logo" class="brand-image img-circle">
+                                <img src="../assets/img/logo-2.png" alt="Logo" class="brand-image img-circle">
                                 <p>Login</p>
                             </div>
-                            <h4 class="mb-3 f-w-400">Login dengan akun anda</h4>
+                            <h4 class="mb-3 f-w-400">Login untuk kelola pembayaran air</h4>
                             <div class="input-group">
                                 <div class="input-group-prepend">
                                     <span class="input-group-text"><i class="feather icon-mail"></i></span>
@@ -27,7 +27,7 @@
                             </div>
 
                             <button type="submit" class="btn btn-block btn-primary mb-4 mt-2 btn-login">Login</button>
-                            <p class="mb-2 text-muted">Tidak punya akses login ? <a href="#" class="f-w-400">Cek Tagihan Saya</a></p>
+                            <p class="mb-2 text-muted">Tidak punya akses login ? <a href="#" class="f-w-400">Cek Tagihan</a></p>
                         </div>
                     </form>
                 </div>
