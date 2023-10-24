@@ -4,7 +4,7 @@
          <div class="sidebar-content">
              <div class="user">
                  <div class="avatar-sm float-left mr-2">
-                     <img src="../assets/img/profile.jpg" alt="..." class="avatar-img rounded-circle">
+                     <img src="../assets/img/user/{{Auth::user()->avatar}}" alt="..." class="avatar-img rounded-circle">
                  </div>
                  <div class="info">
                      <a data-toggle="collapse" href="#collapseExample" aria-expanded="true">
@@ -19,12 +19,7 @@
                      <div class="collapse in" id="collapseExample">
                          <ul class="nav">
                              <li class="sub-menu">
-                                 <a href="#profile">
-                                     <span class="link-collapse">My Profile</span>
-                                 </a>
-                             </li>
-                             <li class="sub-menu">
-                                 <a href="#edit">
+                                 <a href="/profile">
                                      <span class="link-collapse">Edit Profile</span>
                                  </a>
                              </li>

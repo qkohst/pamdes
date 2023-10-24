@@ -37,8 +37,8 @@
                             </div>
                             <div class="col-sm-4">
                                 <div class="form-group">
-                                    <label for="filter_kode">Kode</label>
-                                    <input type="text" class="form-control" id="filter_kode" name="filter_kode" placeholder="Kode">
+                                    <label for="filter_kode">Kode Transaksi</label>
+                                    <input type="text" class="form-control" id="filter_kode" name="filter_kode" placeholder="Kode Transaksi">
                                 </div>
                             </div>
                         </div>

@@ -240,7 +240,7 @@
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label for="file_import">File Import</label>
-                                <input type="file" class="form-control no-spasi uppercase required" id="file_import" name="file_import" accept=".xlsx, .xls">
+                                <input type="file" class="form-control required" id="file_import" name="file_import" accept=".xlsx, .xls">
                             </div>
                         </div>
                     </div>

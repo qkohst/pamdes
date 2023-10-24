@@ -258,3 +258,8 @@
     font-weight: bold;
     color: #ffffff;
 }
+
+/* input group start */
+.custom-file-label {
+    font-weight: unset !important;
+}

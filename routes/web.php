@@ -34,7 +34,9 @@ Route::post('/', 'AuthController@store')->name('login');
 Route::group(['middleware' => ['auth']], function () {
     Route::get('/dashboard', 'DashboardController@index')->name('dashboard');
     Route::get('/logout', 'AuthController@logout')->name('logout');
-
+    Route::resource('/profile', 'ProfileController',  [
+        'uses' => ['index', 'store']
+    ]);
     Route::resource('/setting-global', 'SettingGlobalController',  [
         'uses' => ['index', 'store']
     ]);
