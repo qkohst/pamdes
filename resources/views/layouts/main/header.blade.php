@@ -3,7 +3,7 @@
 
 <head>
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <title>{{$title}} | StPamdes</title>
+    <title>{{$title}} | St Pamdes</title>
     <meta content='width=device-width, initial-scale=1.0, shrink-to-fit=no' name='viewport' />
     <meta name="csrf-token" content="{{ csrf_token() }}" />
     <link rel="icon" href="../assets/img/logo-2.png" type="image/x-icon" />
@@ -56,7 +56,7 @@
             <div class="logo-header" data-background-color="blue">
 
                 <a href="/" class="logo text-white font-weight-bolder">
-                    <img src="../assets/img/logo.png" alt="navbar brand" class="navbar-brand"> StPamdes
+                    <img src="../assets/img/logo.png" alt="navbar brand" class="navbar-brand"> St Pamdes
                 </a>
                 <button class="navbar-toggler sidenav-toggler ml-auto" type="button" data-toggle="collapse" data-target="collapse" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon">

@@ -1,7 +1,7 @@
 <footer class="footer">
     <div class="container-fluid">
         <div class="copyright ml-auto">
-            StPamdes V.10 | Developed by <a href="https://www.instagram.com/qkoh_st" target="_blank">Qkoh St</a> | 2023
+            St Pamdes V.10 | Developed by <a href="https://www.instagram.com/qkoh_st" target="_blank">Qkoh St</a> | 2023
         </div>
     </div>
 </footer>
