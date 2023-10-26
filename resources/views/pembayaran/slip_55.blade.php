@@ -5,7 +5,7 @@
     <title>{{$title}}</title>
     <style>
         @page {
-            size: 55mm 110mm;
+            size: 55mm 115mm;
             /* Lebar 8 cm, tinggi sesuai kebutuhan */
             margin: 1mm;
             /* Margin diatur sesuai kebutuhan */
@@ -112,7 +112,7 @@
             <p>{{$setting_global->nama}}</p>
             <p>{{$setting_global->alamat}}</p>
             <p>WA/TELP : {{$setting_global->nomor_hp_wa}}</p>
-            <p>===================================</p>
+            <p>=================================</p>
             <p>BUKTI PEMBAYARAN AIR</p>
         </div>
 

@@ -5,7 +5,7 @@
     <title>{{$title}}</title>
     <style>
         @page {
-            size: 77mm 140mm;
+            size: 77mm 148mm;
             /* Lebar 8 cm, tinggi sesuai kebutuhan */
             margin: 1mm;
             /* Margin diatur sesuai kebutuhan */
